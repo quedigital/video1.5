@@ -1,0 +1,17 @@
+// TODO: video linked to toc
+// TODO: external epub references
+// TODO: search field (searches TOC and transcript? shows results how?)
+// TODO: do something with transcript? (overlay?)
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// DONE: expand code alerts
+// DONE: project files
+// DONE: "show all markers" button
+// DONE: activate toc
+// DONE: expand video when toc or assets are hidden
+// DONE: show code button as video overlay
+// DONE: bookmarks and notes
+// TODONT: "bookmarks" in toc?
+// DONE: video controls [video.js]
+// DONE: sandbox examples

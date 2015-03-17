@@ -1,0 +1,9 @@
+{
+  "firebase": "video15",
+  "public": ".",
+  "ignore": [
+    "firebase.json",
+    "**/.*",
+    "**/node_modules/**"
+  ]
+}
