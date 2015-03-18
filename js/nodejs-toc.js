@@ -1,6 +1,6 @@
 define([], function () {
 	var toc = [
-		{ depth: "0", short: "<i class='fa fa-home'></i>", desc: "Introduction", video: "9780133929294-Lesson_1_0.mov" },
+		{ depth: "0", short: "<i class='fa fa-home'></i>", desc: "Introduction" },
 
 		{ depth: "1", short: "1", desc: "Node.js Fundamentals" },
 		{ depth: "1,0", short: "<i class='fa fa-pencil'></i>", desc: "Learning Objectives", video: "9780133929294-Lesson_1_0.mov" },
@@ -66,5 +66,54 @@ define([], function () {
 		{ depth: "8", short: "<i class='fa fa-flag-checkered'></i>", desc: "Summary" }
 	];
 	
-	return toc;
+	var code1 = '<pre id="code1" class="code-listing">var censoredWords = ["sad", "bad", "mad"];\n\
+var customCensoredWords = [];\n\
+\n\
+function censor(inStr) {\n\
+	for (idx in censoredWords) {\n\
+		inStr = inStr.replace(censoredWords[idx], "****");\n\
+	}\n\
+\n\
+	for (idx in customCensoredWords) {\n\
+		inStr = inStr.replace(customCensoredWords[idx], "****");\n\
+	}\n\
+	return inStr;\n\
+}\n\
+\n\
+function addCensoredWord(word){\n\
+	customCensoredWords.push(word);\n\
+}\n\
+\n\
+function getCensoredWords(){\n\
+	return censoredWords.concat(customCensoredWords);\n\
+}\n\
+\n\
+exports.censor = censor;\n\
+exports.addCensoredWord = addCensoredWord;\n\
+exports.getCensoredWords = getCensoredWords;</pre>';
+	
+	var sandbox1 = '<iframe src="http://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_1" width="100%" height="__window height__" frameborder="0"></iframe>';
+	var sandbox2 = '<iframe src="http://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_2" width="100%" height="__window height__" frameborder="0"></iframe>';
+
+	var markers = [
+		{ depth: "1,0", start: 5, end: 15, id: "code1", text: "Click here for the code", type: "code", html: code1 },
+		{ depth: "1,0", start: 8, end: 12, id: "sandbox1", text: "Click here to try it out", type: "sandbox", html: sandbox1 },
+		{ depth: "1,0", start: 12, end: 15, id: "sandbox2", text: "Click here to try out this code too", type: "sandbox", html: sandbox2 },
+		{ depth: "1,0", start: 20, end: 25, id: "quiz1", text: "Click here for efficacy", type: "quiz" },
+		{ depth: "1,0", start: 22, end: 27, id: "project1", text: "Click here for project files", type: "files" },
+		{ depth: "1,0", start: 23, end: 30, id: "read1", text: "Click here to read more", type: "read" }
+	];
+	
+	/*
+			pop.timebase( { start: 5, end: 15, el: ".alert1", id: "code1", text: "Click here for the code" } );
+			pop.timebase( { start: 8, end: 12, el: ".alert1a", id: "sandbox1", text: "Click here to try it out",
+				callback: $.proxy(this.onShowSandbox, this) } );
+			pop.timebase( { start: 12, end: 15, el: ".alert1b", id: "sandbox2", text: "Click here to try out this code too",
+				callback: $.proxy(this.onShowSandbox, this) } );
+			pop.timebase( { start: 20, end: 25, el: ".alert2", id: "quiz1", text: "Click here for self-check" } );
+			pop.timebase( { start: 22, end: 27, el: ".alert3", id: "project1", text: "Click here for project files" } );
+			pop.timebase( { start: 23, end: 30, el: ".alert4", id: "read1", text: "Click here to read more" } );
+	*/
+		
+	return { toc: toc, markers: markers };
 });

@@ -1,37 +1,46 @@
-/* line 7, ../sass/_general.scss */
+/* line 9, ../sass/_general.scss */
 .col-xs-0 {
   float: left;
   width: 0;
 }
 
-/* line 12, ../sass/_general.scss */
+/* line 14, ../sass/_general.scss */
 #main {
   margin-top: 50px;
   opacity: 0;
 }
 
-/* line 17, ../sass/_general.scss */
+/* line 19, ../sass/_general.scss */
 #contents {
   transition: width .5s linear;
   padding: 0;
 }
-/* line 22, ../sass/_general.scss */
+/* line 24, ../sass/_general.scss */
 #contents .well {
   padding-left: 0;
   height: 100%;
   margin-bottom: 0;
 }
-/* line 28, ../sass/_general.scss */
+/* line 30, ../sass/_general.scss */
 #contents .level {
   left: -30px;
 }
 
-/* line 33, ../sass/_general.scss */
+/* line 35, ../sass/_general.scss */
+.video-holder {
+  height: 100%;
+  top: 50%;
+  transform: translateY(-50%);
+  position: relative;
+}
+
+/* line 42, ../sass/_general.scss */
 #video {
+  padding: 0;
   transition: width .5s linear;
   background-color: #a7503d;
 }
-/* line 38, ../sass/_general.scss */
+/* line 49, ../sass/_general.scss */
 #video .overlay {
   position: absolute;
   top: 0;
@@ -39,7 +48,7 @@
   width: 100%;
   height: 100%;
 }
-/* line 45, ../sass/_general.scss */
+/* line 56, ../sass/_general.scss */
 #video .overlay .overlay-block {
   position: absolute;
   top: 0;
@@ -53,33 +62,24 @@
   cursor: pointer;
   z-index: 1000;
 }
-/* line 58, ../sass/_general.scss */
+/* line 69, ../sass/_general.scss */
 #video .overlay .overlay-block:hover {
   background-color: black;
   border-color: white;
 }
-/* line 65, ../sass/_general.scss */
+/* line 76, ../sass/_general.scss */
 #video video {
   width: 100%;
+  background-color: #a7503d;
 }
 
-/* line 70, ../sass/_general.scss */
-#sidebar {
-  padding: 0;
-}
-/* line 73, ../sass/_general.scss */
-#sidebar .well {
-  height: 100%;
-  margin-bottom: 0;
-}
-/* line 78, ../sass/_general.scss */
-#sidebar pre {
-  word-wrap: normal;
-  margin-top: 1em;
+/* line 82, ../sass/_general.scss */
+.code-listing {
   position: relative;
 }
-/* line 84, ../sass/_general.scss */
-#sidebar .btn-clipboard, #sidebar .btn-download {
+
+/* line 86, ../sass/_general.scss */
+.btn-clipboard, .btn-download {
   position: absolute;
   top: 0;
   right: 0;
@@ -93,29 +93,45 @@
   border: 1px solid #e1e1e8;
   border-radius: 0 4px 0 4px;
 }
-/* line 98, ../sass/_general.scss */
-#sidebar .btn-clipboard:hover, #sidebar .btn-download:hover {
+/* line 100, ../sass/_general.scss */
+.btn-clipboard:hover, .btn-download:hover {
   color: #fff;
   background-color: #563d7c;
   border-color: #563d7c;
 }
-/* line 105, ../sass/_general.scss */
+
+/* line 107, ../sass/_general.scss */
+#sidebar {
+  padding: 0;
+}
+/* line 110, ../sass/_general.scss */
+#sidebar .well {
+  height: 100%;
+  margin-bottom: 0;
+}
+/* line 115, ../sass/_general.scss */
+#sidebar pre {
+  word-wrap: normal;
+  margin-top: 1em;
+  position: relative;
+}
+/* line 121, ../sass/_general.scss */
 #sidebar #asset-buttons {
   padding: 10px 0;
 }
-/* line 107, ../sass/_general.scss */
+/* line 123, ../sass/_general.scss */
 #sidebar #asset-buttons .btn.active.focus, #sidebar #asset-buttons .btn.focus {
   outline: none;
 }
-/* line 112, ../sass/_general.scss */
+/* line 128, ../sass/_general.scss */
 #sidebar .nav-tabs > li.active > a {
   background-color: #eee;
 }
-/* line 116, ../sass/_general.scss */
+/* line 132, ../sass/_general.scss */
 #sidebar .tab-pane.active {
   background-color: #eee;
 }
-/* line 120, ../sass/_general.scss */
+/* line 136, ../sass/_general.scss */
 #sidebar .border {
   border-top: none;
   border-left: 2px solid #337ab7;
@@ -124,7 +140,7 @@
   border-radius: 10px 10px 0 0;
   padding-bottom: 20px;
 }
-/* line 129, ../sass/_general.scss */
+/* line 145, ../sass/_general.scss */
 #sidebar .scroller {
   padding: 10px;
   margin: 5px;
@@ -132,25 +148,25 @@
   border: 1px solid #a2d3a1;
   border-radius: 10px;
 }
-/* line 137, ../sass/_general.scss */
+/* line 153, ../sass/_general.scss */
 #sidebar .level {
   margin-bottom: 10px;
   position: relative;
 }
 
-/* line 143, ../sass/_general.scss */
+/* line 159, ../sass/_general.scss */
 .scroller {
   overflow-y: scroll;
   overflow-x: hidden;
   height: 100%;
 }
 
-/* line 149, ../sass/_general.scss */
+/* line 165, ../sass/_general.scss */
 .nav-list {
   padding-left: 35px;
   position: relative;
 }
-/* line 153, ../sass/_general.scss */
+/* line 169, ../sass/_general.scss */
 .nav-list .divider {
   box-sizing: content-box;
   height: 1px;
@@ -159,29 +175,32 @@
   background-color: #e5e5e5;
   border-bottom: 1px solid #fff;
 }
-/* line 162, ../sass/_general.scss */
+/* line 178, ../sass/_general.scss */
 .nav-list > li > a {
   padding: 3px 0;
   margin-left: 0;
+  /* NOTE: Added this because elements using animate.css were disappearing */
+  animation-fill-mode: none;
+  -webkit-animation-fill-mode: none;
 }
-/* line 166, ../sass/_general.scss */
+/* line 186, ../sass/_general.scss */
 .nav-list > li > a:hover, .nav-list > li > a:focus {
   text-decoration: none;
   background-color: #ccc;
 }
-/* line 171, ../sass/_general.scss */
+/* line 191, ../sass/_general.scss */
 .nav-list > li > a:active, .nav-list > li > a.active {
-  background-color: #999;
+  background-color: #C1C0E7;
   color: #191832;
 }
 
-/* line 178, ../sass/_general.scss */
+/* line 198, ../sass/_general.scss */
 .nav-list .nav-header {
   margin-right: -15px;
   margin-left: -15px;
 }
 
-/* line 183, ../sass/_general.scss */
+/* line 203, ../sass/_general.scss */
 .nav-header {
   display: block;
   padding: 3px 15px;
@@ -193,12 +212,12 @@
   text-transform: uppercase;
 }
 
-/* line 197, ../sass/_general.scss */
+/* line 217, ../sass/_general.scss */
 .trackalert {
   transition: transform .5s ease-in-out;
 }
 
-/* line 201, ../sass/_general.scss */
+/* line 221, ../sass/_general.scss */
 [data-notify="progressbar"] {
   margin-bottom: 0px;
   position: absolute;
@@ -209,12 +228,12 @@
   display: none;
 }
 
-/* line 211, ../sass/_general.scss */
+/* line 231, ../sass/_general.scss */
 [data-notify="container"] {
   max-width: 350px;
 }
 
-/* line 215, ../sass/_general.scss */
+/* line 235, ../sass/_general.scss */
 .level {
   display: inline-block;
   background-color: #A5A4D2;
@@ -230,39 +249,39 @@
   position: absolute;
 }
 
-/* line 230, ../sass/_general.scss */
+/* line 250, ../sass/_general.scss */
 #toc-toggler {
   margin: 8px 0 0 8px;
 }
 
-/* line 234, ../sass/_general.scss */
+/* line 254, ../sass/_general.scss */
 .checked {
   color: orange;
 }
 
-/* line 238, ../sass/_general.scss */
+/* line 258, ../sass/_general.scss */
 .video-js {
   width: 100% !important;
-  height: auto !important;
+  /*	height: auto !important;*/
+  height: 100% !important;
 }
 
-/* line 243, ../sass/_general.scss */
+/*
 .video-js:after {
-  content: '.';
-  display: block;
-  position: relative;
-  padding: 55% 0 0 0;
-  /* (height/width)*100%, eg. 56.25% for 16:9 75% for 4:3 */
-  margin: 0 0 0 -100%;
-  visibility: hidden;
+    content: '.';
+    display: block;
+    position: relative;
+    padding: 55% 0 0 0;
+    margin: 0 0 0 -100%;
+    visibility: hidden;
 }
-
-/* line 252, ../sass/_general.scss */
+*/
+/* line 275, ../sass/_general.scss */
 .vjs-poster {
   background-color: #a7503d;
 }
 
-/* line 256, ../sass/_general.scss */
+/* line 279, ../sass/_general.scss */
 .sandbox {
   cursor: pointer;
 }

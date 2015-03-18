@@ -59,13 +59,7 @@ define(["jquery.ui"], function () {
 		},
 		
 		launchVideo: function (index) {
-			for (var i = index; i >= 0; i--) {
-				var v = this.options.data[i];
-				if (v.video) {
-					this.element.trigger("playvideo", "video/" + v.video);
-					break;
-				}
-			}
+			this.element.trigger("playvideo", index);
 		},
 		
 		_destroy: function () {

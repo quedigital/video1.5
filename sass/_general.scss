@@ -1,3 +1,5 @@
+$video-background-color: rgb(167, 80, 61);
+
 html {
 }
 
@@ -30,10 +32,19 @@ body {
 	}
 }
 
+.video-holder {
+	height: 100%;
+	top: 50%;
+	transform: translateY(-50%);
+	position: relative;
+}
+
 #video {
+	padding: 0;
+	
 	transition: width .5s linear;
 	
-	background-color: rgb(167, 80, 61);
+	background-color: $video-background-color;
 	
 	.overlay {
 		position: absolute;
@@ -64,6 +75,32 @@ body {
 	
 	video {
 		width: 100%;
+		background-color: $video-background-color;
+	}
+}
+
+.code-listing {
+	position: relative;
+}
+
+.btn-clipboard, .btn-download {
+	position: absolute;
+	top: 0;
+	right: 0;
+	z-index: 10;
+	display: block;
+	padding: 5px 8px;
+	font-size: 12px;
+	color: #767676;
+	cursor: pointer;
+	background-color: #fff;
+	border: 1px solid #e1e1e8;
+	border-radius: 0 4px 0 4px;
+	
+	&:hover {
+		color: #fff;
+		background-color: #563d7c;
+		border-color: #563d7c;
 	}
 }
 
@@ -79,27 +116,6 @@ body {
 		word-wrap: normal;
 		margin-top: 1em;
 		position: relative;
-	}
-	
-	.btn-clipboard, .btn-download {
-		position: absolute;
-		top: 0;
-		right: 0;
-		z-index: 10;
-		display: block;
-		padding: 5px 8px;
-		font-size: 12px;
-		color: #767676;
-		cursor: pointer;
-		background-color: #fff;
-		border: 1px solid #e1e1e8;
-		border-radius: 0 4px 0 4px;
-		
-		&:hover {
-			color: #fff;
-			background-color: #563d7c;
-			border-color: #563d7c;
-		}
 	}
 	
 	#asset-buttons {
@@ -163,13 +179,17 @@ body {
 		padding: 3px 0;
 		margin-left: 0;
 		
+		/* NOTE: Added this because elements using animate.css were disappearing */
+		animation-fill-mode: none;
+		-webkit-animation-fill-mode: none;
+		
 		&:hover, &:focus {
 			text-decoration: none;
 			background-color: #ccc;
 		}
 		
 		&:active, &.active {
-			background-color: #999;
+			background-color: #C1C0E7;
 			color: rgb(25, 24, 50);
 		}
 	}
@@ -237,20 +257,23 @@ body {
 
 .video-js {
     width: 100% !important;
-    height: auto !important;
+/*	height: auto !important;*/
+	height: 100% !important;
 }
 
+/*
 .video-js:after {
     content: '.';
     display: block;
     position: relative;
-    padding: 55% 0 0 0; /* (height/width)*100%, eg. 56.25% for 16:9 75% for 4:3 */
+    padding: 55% 0 0 0;
     margin: 0 0 0 -100%;
     visibility: hidden;
 }
+*/
 
 .vjs-poster {
-	background-color: rgb(167, 80, 61);
+	background-color: $video-background-color;
 }
 
 .sandbox {
