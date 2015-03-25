@@ -1,11 +1,16 @@
 (function (Popcorn) {  
+	var overlay = "#video .overlay";
+	var offsetX = 500;
+    var USING_VIDEO_OVERLAYS = false;
+
 	Popcorn.plugin("timebase", {
-		_setup : function (track) {
+		_setup: function (track) {
 		},
 		
 		frame: function (event, track) {
-			if ($(track.el).hasClass("hidden")) {
+			if (!track.visible) {
 				track._natives.show(track);
+				track.visible = true;
 			}
 		},
 		
@@ -16,27 +21,38 @@
 		},
 		
 		end: function (event, track) {
-			if (!$(track.el).hasClass("hidden")) {
+			if (track.visible) {
 				track._natives.hide(track);
+				track.visible = false;
 			}
 		},
 		
 		show: function (track) {
-			var vo = $("#video .overlay").VideoOverlay("instance");
-			vo.add({ id: track.id, text: track.text, callback: track.callback });
+            if (USING_VIDEO_OVERLAYS) {
+                var vo = $(overlay).VideoOverlay("instance");
+                vo.add({id: track.id, text: track.text, callback: track.callback});
+            }
 
-			$(track.el).css( { transform: "translateX(500px)" } );
-			$(track.el).removeClass("hidden");
+			if ($(track.alert).hasClass("show-all")) {
+				$(track.alert).addClass("current");
+			}
+			
+			$(track.alert).css( { transform: "translateX(" + offsetX + "px)" } );
+			$(track.alert).removeClass("hidden");
 			setTimeout(function () {
-				$(track.el).css( { transform: "translateX(0)" } );
+				$(track.alert).css( { transform: "translateX(0)" } );
 			}, 0);
 		},
 		
 		hide: function (track) {
-			var vo = $("#video .overlay").VideoOverlay("instance");
+			var vo = $(overlay).VideoOverlay("instance");
 			vo.remove(track.id);
 			
-			$(track.el).removeClass("hidden").css( { transform: "translateX(0)" } ).css( { transform: "translateX(500px)" } ).animate( { _dummy: 0 }, { duration: 500, done: function (anim) { $(anim.elem).addClass("hidden"); } });
+			if (!$(track.alert).hasClass("show-all")) {
+				$(track.alert).removeClass("hidden current").css( { transform: "translateX(0)" } ).css( { transform: "translateX(" + offsetX + "px)" } ).animate( { _dummy: 0 }, { duration: 500, done: function (anim) { $(anim.elem).addClass("hidden"); } });
+			} else {
+				$(track.alert).removeClass("current");
+			}
 		}
 	});
 })(Popcorn);

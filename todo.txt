@@ -1,5 +1,5 @@
-// TODO: video linked to toc
-// TODO: external epub references
+// TODO: map epub to timestamps
+// TODO: only show resources for the current video? (or: how to show ALL resources?)
 // TODO: search field (searches TOC and transcript? shows results how?)
 // TODO: do something with transcript? (overlay?)
 
@@ -15,3 +15,6 @@
 // TODONT: "bookmarks" in toc?
 // DONE: video controls [video.js]
 // DONE: sandbox examples
+// DONE: video linked to toc
+// DONE: overlays clickable
+// DONE: external epub references

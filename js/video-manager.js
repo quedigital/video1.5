@@ -23,33 +23,28 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 			this.markers = markers;
 			this.player = player;
 
-			var pop = Popcorn(el, { frameAnimation: true });
-			
-			this.addAllMarkers();
-	
-			/*
-			pop.timebase( { start: 5, end: 15, el: ".alert1", id: "code1", text: "Click here for the code" } );
-			pop.timebase( { start: 8, end: 12, el: ".alert1a", id: "sandbox1", text: "Click here to try it out",
-				callback: $.proxy(this.onShowSandbox, this) } );
-			pop.timebase( { start: 12, end: 15, el: ".alert1b", id: "sandbox2", text: "Click here to try out this code too",
-				callback: $.proxy(this.onShowSandbox, this) } );
-			pop.timebase( { start: 20, end: 25, el: ".alert2", id: "quiz1", text: "Click here for self-check" } );
-			pop.timebase( { start: 22, end: 27, el: ".alert3", id: "project1", text: "Click here for project files" } );
-			pop.timebase( { start: 23, end: 30, el: ".alert4", id: "read1", text: "Click here to read more" } );
-			*/
+			this.pop = Popcorn(el, { frameAnimation: true });
 			
 			this.player.on("ended", $.proxy(this.onVideoEnded, this));
 			
 			this.currentIndex = undefined;
+
+			this.trackID = 0;
 		},
-		
+
+		loadFirstVideo: function () {
+			var index = this.getFirstVideoFromTOC();
+
+			this.playFromTOC(index, { pause: true });
+		},
+
 		playFirstVideo: function () {
 			var index = this.getFirstVideoFromTOC();
 			
 			this.playFromTOC(index);
 		},
 		
-		playFromTOC: function (index) {
+		playFromTOC: function (index, options) {
 			while (!this.toc[index].video) {
 				index++;
 			}
@@ -57,11 +52,22 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 			var src = "video/" + this.toc[index].video;
 			
 			this.player.src({ type: "video/mp4", src: src });
-			this.player.play();
-			
+
+			if (options && options.pause) {
+			} else {
+				this.player.play();
+			}
+
 			this.currentIndex = index;
 			
 			this.updateUI();
+
+			var showAllMarkers = options && options.showAllMarkers;
+
+			this.addMarkers(showAllMarkers);
+
+			this.removeAllTriggers();
+			this.addTriggersForThisVideo();
 		},
 		
 		getFirstVideoFromTOC: function () {
@@ -112,41 +118,72 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 			});
 		},
 		
-		addAllMarkers: function () {
-			var container = $("#sidebar .scroller");
+		addMarkers: function (showAllMarkers) {
+			var curDepth = this.toc[this.currentIndex].depth;
+
+			var container = $("#assets .scroller");
 			
 			container.empty();
 			
 			for (var i = 0; i < this.markers.length; i++) {
 				var m = this.markers[i];
-				
-				var el = $("<div>", { class: "alert trackalert" }).attr("role", "alert");
-				
-				$("<span>", { class: "badge", text: String(m.start).toHHMMSS() }).appendTo(el);
-				$("<span>", { text: " " + m.text }).appendTo(el);
-				
-				switch (m.type) {
-					case "code":
-						el.addClass("alert-danger");
-						break;
-					case "sandbox":
-						el.addClass("alert-info");
-						break;
-					case "quiz":
-						el.addClass("alert-warning");
-						break;
-					case "files":
-						el.addClass("alert-success");
-						break;
-					case "read":
-						el.addClass("alert-danger");
-						break;
+
+				if (m.depth == curDepth) {
+					var el = $("<div>", { class: "alert trackalert" }).attr("role", "alert");
+					if (!showAllMarkers) el.addClass("hidden");
+
+					var txt = m.type == "epub" ? "Click here to read more." : m.text;
+
+					$("<span>", {class: "badge", text: String(m.start).toHHMMSS()}).appendTo(el);
+					$("<span>", {text: " " + txt}).appendTo(el);
+
+					switch (m.type) {
+						case "code":
+							el.addClass("alert-danger");
+							break;
+						case "sandbox":
+							el.addClass("alert-info");
+							break;
+						case "quiz":
+							el.addClass("alert-warning");
+							break;
+						case "files":
+							el.addClass("alert-success");
+							break;
+						case "epub":
+							el.addClass("alert-success");
+							break;
+					}
+
+					el.click($.proxy(this.onClickMarker, this, i));
+
+					container.append(el);
+
+					if (!m.elements) m.elements = {};
+					m.elements.alert = el;
 				}
-				
-				el.click($.proxy(this.onClickMarker, this, i));
-				
-				el.appendTo(container);
 			}
+		},
+		
+		addTriggersForThisVideo: function () {
+			var curDepth = this.toc[this.currentIndex].depth;
+			
+			for (var i = 0; i < this.markers.length; i++) {
+				var m = this.markers[i];
+				if (m.depth == curDepth) {
+					var el = m.elements ? m.elements.alert : undefined;
+					this.pop.timebase( { start: m.start, end: m.end, alert: el, id: this.trackID++, text: m.text,
+						callback: $.proxy(this.onClickMarker, this, i) } );
+				}
+			}
+		},
+
+		removeAllTriggers: function () {
+			for (var i = 0; i < this.trackID; i++) {
+				this.pop.removeTrackEvent(i);
+			}
+
+			this.trackID = 0;
 		},
 		
 		onClickMarker: function (index) {
@@ -176,7 +213,6 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 					var contents = m.html;
 					
 					var wh = $(window).outerHeight();
-					
 					contents = contents.replace("__window height__", (wh * .75));
 					
 					BootstrapDialog.show({
@@ -209,6 +245,20 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 					});
 					
 					break;
+					
+                case "epub":
+                    var contents = '<iframe src="epubs/' + m.src + '/oebps/html/' + m.page + '" width="100%" height="__window height__" frameborder="0"></iframe>';
+
+                    var wh = $(window).outerHeight();
+                    contents = contents.replace("__window height__", (wh * .75));
+
+                    BootstrapDialog.show({
+                        title: "Read More…",
+                        message: contents,
+                        size: BootstrapDialog.SIZE_WIDE
+                    });
+
+                    break;
 			}
 		},
 		
@@ -235,7 +285,7 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 			$.notify({
 				// options
 				message: 'Downloaded.',
-			},{
+			}, {
 				// settings
 				type: 'success',
 				allow_dismiss: false,
@@ -244,8 +294,12 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 				animate: {
 					enter: 'animated fadeInDown',
 					exit: 'animated fadeOutUp'
-				},			
-			});		
+				},
+			});
+		},
+
+		isShowingAll: function () {
+			return this.pop.SHOWING_ALL;
 		}
 			
 	};

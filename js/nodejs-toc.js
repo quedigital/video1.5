@@ -99,21 +99,29 @@ exports.getCensoredWords = getCensoredWords;</pre>';
 		{ depth: "1,0", start: 5, end: 15, id: "code1", text: "Click here for the code", type: "code", html: code1 },
 		{ depth: "1,0", start: 8, end: 12, id: "sandbox1", text: "Click here to try it out", type: "sandbox", html: sandbox1 },
 		{ depth: "1,0", start: 12, end: 15, id: "sandbox2", text: "Click here to try out this code too", type: "sandbox", html: sandbox2 },
+
+        { depth: "1,0", start: 15, end: 20, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1" },
+
 		{ depth: "1,0", start: 20, end: 25, id: "quiz1", text: "Click here for efficacy", type: "quiz" },
 		{ depth: "1,0", start: 22, end: 27, id: "project1", text: "Click here for project files", type: "files" },
-		{ depth: "1,0", start: 23, end: 30, id: "read1", text: "Click here to read more", type: "read" }
+
+		{ depth: "1,1", start: 18, end: 23, type: "epub", src: "learningnodejs", page: "ch01.html#ch01_ch01" },
+
+		{ depth: "1,1", start: 26, end: 31, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1" },
+		{ depth: "1,1", start: 58, end: 63, type: "epub", src: "nodejsmongodbangularjs", page: "ch13.html#page_227" },
+
+		{ depth: "1,2", start: 18, end: 23, type: "epub", src: "learningnodejs", page: "ch04.html#ch04_ch04" },
+
+		{ depth: "1,2", start: 42, end: 47, type: "epub", src: "learningangularjs", page: "ch01.html#ch01lev1sec1" },
+
+		{ depth: "1,3", start: 11, end: 16, type: "epub", src: "learningnodejs", page: "ch05.html#ch05_ch05" },
+
+		{ depth: "1,4", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch03.html#ch03_ch03" },
+
+		{ depth: "1,5", start: 15, end: 20, type: "epub", src: "learningnodejs", page: "ch04.html#ch04lev1sec6" },
+
+		{ depth: "1,6", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch06.html#ch06_ch06" }
 	];
-	
-	/*
-			pop.timebase( { start: 5, end: 15, el: ".alert1", id: "code1", text: "Click here for the code" } );
-			pop.timebase( { start: 8, end: 12, el: ".alert1a", id: "sandbox1", text: "Click here to try it out",
-				callback: $.proxy(this.onShowSandbox, this) } );
-			pop.timebase( { start: 12, end: 15, el: ".alert1b", id: "sandbox2", text: "Click here to try out this code too",
-				callback: $.proxy(this.onShowSandbox, this) } );
-			pop.timebase( { start: 20, end: 25, el: ".alert2", id: "quiz1", text: "Click here for self-check" } );
-			pop.timebase( { start: 22, end: 27, el: ".alert3", id: "project1", text: "Click here for project files" } );
-			pop.timebase( { start: 23, end: 30, el: ".alert4", id: "read1", text: "Click here to read more" } );
-	*/
-		
+
 	return { toc: toc, markers: markers };
 });

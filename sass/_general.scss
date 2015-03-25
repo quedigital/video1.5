@@ -1,4 +1,4 @@
-$video-background-color: rgb(167, 80, 61);
+$video-background-color: white;
 
 html {
 }
@@ -216,6 +216,10 @@ body {
 
 .trackalert {
 	transition: transform .5s ease-in-out;
+	
+	&.current {
+		border-color: black;
+	}
 }
 
 [data-notify="progressbar"] {
@@ -233,7 +237,7 @@ body {
 }
 
 .level {
-	display: inline-block;
+    display: inline-block;
 	background-color: #A5A4D2;
 	color: white;
 	font-size: 12px;
@@ -251,13 +255,16 @@ body {
 	margin: 8px 0 0 8px;
 }
 
+#resource-toggler {
+    margin: 8px 8px 0 0;
+}
+
 .checked {
 	color: orange;
 }
 
 .video-js {
     width: 100% !important;
-/*	height: auto !important;*/
 	height: 100% !important;
 }
 
