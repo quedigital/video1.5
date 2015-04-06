@@ -20,16 +20,41 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 	var VideoManager = {
 		initialize: function (toc, el, player, markers) {
 			this.toc = toc;
+			this.el = el;
 			this.markers = markers;
 			this.player = player;
 
 			this.pop = Popcorn(el, { frameAnimation: true });
 			
 			this.player.on("ended", $.proxy(this.onVideoEnded, this));
+			this.player.on("timeupdate", $.proxy(this.saveCurrentVideoTime, this));
 			
 			this.currentIndex = undefined;
 
 			this.trackID = 0;
+		},
+
+		saveCurrentVideoIndex: function () {
+			localStorage.setItem("PTG:currentIndex", this.currentIndex);
+		},
+
+		saveCurrentVideoTime: function () {
+			var t = this.player.currentTime();
+			localStorage.setItem("PTG:currentTime", t);
+		},
+
+		getCurrentVideoTime: function () {
+			return localStorage.getItem("PTG:currentTime");
+		},
+
+		loadMostRecentVideo: function () {
+			var index = localStorage.getItem("PTG:currentIndex");
+
+			if (index == undefined) {
+				this.loadFirstVideo();
+			} else {
+				this.playFromTOC(index, { pause: true, time: this.getCurrentVideoTime() } );
+			}
 		},
 
 		loadFirstVideo: function () {
@@ -45,13 +70,23 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 		},
 		
 		playFromTOC: function (index, options) {
-			while (!this.toc[index].video) {
+			while (index < this.toc.length && !this.toc[index].video) {
 				index++;
 			}
-			
+
+			if (index >= this.toc.length) return;
+
 			var src = "video/" + this.toc[index].video;
-			
+
+			if (window.location.hostname == "localhost") {
+				src = "https://video15.firebaseapp.com/" + src;
+			}
+
 			this.player.src({ type: "video/mp4", src: src });
+
+			if (options && options.time) {
+				this.player.currentTime(options.time);
+			}
 
 			if (options && options.pause) {
 			} else {
@@ -68,6 +103,8 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 
 			this.removeAllTriggers();
 			this.addTriggersForThisVideo();
+
+			this.saveCurrentVideoIndex();
 		},
 		
 		getFirstVideoFromTOC: function () {
@@ -132,10 +169,15 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 					var el = $("<div>", { class: "alert trackalert" }).attr("role", "alert");
 					if (!showAllMarkers) el.addClass("hidden");
 
-					var txt = m.type == "epub" ? "Click here to read more." : m.text;
+					var txt = m.type == "epub" ? (m.text ? m.text : "Click here to read more") : m.text;
 
-					$("<span>", {class: "badge", text: String(m.start).toHHMMSS()}).appendTo(el);
-					$("<span>", {text: " " + txt}).appendTo(el);
+					var r = $("<div>", { class: "row"}).appendTo(el);
+
+					var d1 = $("<div>", { class: "col-xs-2" }).appendTo(r);
+					var d2 = $("<div>", { class: "col-xs-7" }).appendTo(r);
+					var d3 = $("<div>", { class: "col-xs-3" }).appendTo(r);
+
+					var defaultPlacement = true;
 
 					switch (m.type) {
 						case "code":
@@ -151,9 +193,22 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 							el.addClass("alert-success");
 							break;
 						case "epub":
+							var coverURL = "epubs/" + m.src + "/OEBPS/html/graphics/" + m.cover;
+
 							el.addClass("alert-success");
+
+							var cover = $("<img>", { src: coverURL, class: "tiny-thumbnail" });
+							d3.append(cover);
+
+							break;
+						case "extra":
+							el.addClass("alert-warning");
 							break;
 					}
+
+					$("<span>", {class: "badge", text: String(m.start).toHHMMSS()}).appendTo(d1);
+
+					$("<span>", {html: " " + txt}).appendTo(d2);
 
 					el.click($.proxy(this.onClickMarker, this, i));
 
@@ -180,8 +235,13 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 
 		removeAllTriggers: function () {
 			for (var i = 0; i < this.trackID; i++) {
+				console.log("removing " + i);
 				this.pop.removeTrackEvent(i);
 			}
+
+			delete this.pop;
+
+			this.pop = Popcorn(this.el, { frameAnimation: true });
 
 			this.trackID = 0;
 		},
@@ -247,18 +307,46 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 					break;
 					
                 case "epub":
-                    var contents = '<iframe src="epubs/' + m.src + '/oebps/html/' + m.page + '" width="100%" height="__window height__" frameborder="0"></iframe>';
+	                var coverURL = "epubs/" + m.src + "/OEBPS/html/graphics/" + m.cover;
+	                var cover = "<img class='img-thumbnail' src='" + coverURL + "'/>";
 
-                    var wh = $(window).outerHeight();
-                    contents = contents.replace("__window height__", (wh * .75));
+	                var contents = '<div class="row"><div class="col-xs-2"><a class="center-block text-center" href="#">' + cover + '<p>Buy it here!</p></a></div><div class="col-xs-10"><iframe src="epubs/' + m.src + '/OEBPS/html/' + m.page + '" width="100%" height="__window height__" frameborder="0"></iframe></div></div>';
+	                var wh = $(window).outerHeight();
+	                contents = contents.replace("__window height__", (wh * .75));
 
                     BootstrapDialog.show({
-                        title: "Read More…",
-                        message: contents,
+                        title: "<span class='lead'>Read more.</span> An excerpt from <strong>" + m.title + "</strong>",
+	                    message: contents,
                         size: BootstrapDialog.SIZE_WIDE
+	                    /* To inject CSS:
+	                    onshown: function (dialogRef) {
+		                    var frm = $("iframe")[0].contentDocument;
+		                    var otherhead = frm.getElementsByTagName("head")[0];
+		                    var link = frm.createElement("link");
+		                    link.setAttribute("rel", "stylesheet");
+		                    link.setAttribute("type", "text/css");
+		                    link.setAttribute("href", "http://fonts.googleapis.com/css?family=Bitter");
+		                    otherhead.appendChild(link);
+		                    var body = frm.getElementsByTagName("body")[0];
+		                    console.log(body);
+	                    }*/
                     });
 
                     break;
+
+				case "extra":
+					var contents = '<iframe src="' + m.src + '" width="100%" height="__window height__" frameborder="0"></frame>';
+
+					var wh = $(window).outerHeight();
+					contents = contents.replace("__window height__", (wh * .75));
+
+					BootstrapDialog.show({
+						title: "Try This…",
+						message: contents,
+						size: BootstrapDialog.SIZE_WIDE
+					});
+
+					break;
 			}
 		},
 		

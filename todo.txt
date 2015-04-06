@@ -1,5 +1,4 @@
-// TODO: map epub to timestamps
-// TODO: only show resources for the current video? (or: how to show ALL resources?)
+// TODO: clear events from popcorn when loading new video (it wasn't accounting for the length of the newly-loaded video)
 // TODO: search field (searches TOC and transcript? shows results how?)
 // TODO: do something with transcript? (overlay?)
 
@@ -18,3 +17,11 @@
 // DONE: video linked to toc
 // DONE: overlays clickable
 // DONE: external epub references
+// DONE: map epub to timestamps
+// DONE: only show resources for the current video? (or: how to show ALL resources?)
+// DONE: make code match from 1.2
+// DONE: add quiz
+// DONE: "assets" -> "resources"
+// DONE: tooltips for nav buttons?
+// DONE: add "from this book" at top of "read more" popup (along the left-hand edge; use the wider popup)
+// DONE: add book cover to "read more" markers

@@ -28,6 +28,9 @@
 		},
 		
 		show: function (track) {
+			console.log("SHOWING TIMED EVENT");
+			console.log(track);
+
             if (USING_VIDEO_OVERLAYS) {
                 var vo = $(overlay).VideoOverlay("instance");
                 vo.add({id: track.id, text: track.text, callback: track.callback});

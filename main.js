@@ -8,15 +8,15 @@ requirejs.config({
 		"bootstrap-dialog": "bootstrap-dialog.min",
 		"imagesloaded": "imagesloaded.pkgd.min",
 		"popcorn": "popcorn-complete.min",
-        "coach-marks": "../../../CommonJavascript/widgets/js/coach-marks"
+        //"coach-marks": "/widgets/js/coach-marks"
 	},
 	
 	shim: {
 		"jquery": {
-			export: "$",
+			export: "$"
 		},
 		"jquery.ui": {
-			export: "$",
+			export: "$"
 		},
 		"bootstrap": {
 			export: "$",
@@ -30,7 +30,7 @@ requirejs.config({
 			deps: ['bootstrap']
 		},
 		"popcorn": {
-			export: "Popcorn",
+			export: "Popcorn"
 		},
 		"popcorn.timebase": {
 			export: "Popcorn",
@@ -39,10 +39,11 @@ requirejs.config({
 		"video": {
 			export: "videojs"
 		}
-	},
+	}
 });
 
-require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "coach-marks"], function (metadata, VideoManager) {
+//require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "coach-marks"], function (metadata, VideoManager) {
+require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap"], function (metadata, VideoManager) {
 
 	var coachMarksShown = false;
 
@@ -70,10 +71,12 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 		// NOTE: started using opacity too since the tab panels were overriding "invisible"
 		$("#main").removeClass("invisible").css("opacity", 1);
 
+		/*
 		if (!coachMarksShown) {
 			$("#coach-marks").CoachMarks().CoachMarks("instance").open();
 			coachMarksShown = true;
 		}
+		*/
 	}
 	
 	function onResize () {
@@ -150,10 +153,13 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 //	$(".sandbox").click(onShowSandbox);
 	$(".toc").on("playvideo", onPlayVideo);
 
+	$("body").tooltip();
+
 	videojs("main_video", { "controls": true, "autoplay": false, "preload": "auto" });
 
 	VideoManager.initialize(metadata.toc, "#video video", videojs("main_video"), metadata.markers);
 	
-	VideoManager.loadFirstVideo();
+	//VideoManager.loadFirstVideo();
+	VideoManager.loadMostRecentVideo();
 	
 });

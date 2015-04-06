@@ -91,36 +91,61 @@ function getCensoredWords(){\n\
 exports.censor = censor;\n\
 exports.addCensoredWord = addCensoredWord;\n\
 exports.getCensoredWords = getCensoredWords;</pre>';
+
+	var code2 = '<pre id="code2" class="code-listing">var greeting = "Hello World";\n\
+console.log(greeting);\n\
+\n\
+var random = Math.floor( Math.random() * 10);\n\
+console.log("Random: " + random);\n\
+\n\
+function displayMessgae(msg){\n\
+	console.log(msg);\n\
+}\n\
+\n\
+var arr = ["One", "Two", "Three"];\n\
+console.log("Element 0: " + arr[0]);\n\
+console.log("Element 2: " + arr[2]);\n\
+\n\
+var obj = {first: "Brad", last: "Dayley"};\n\
+console.log("First: " + obj.first);\n\
+console.log("Last: " + obj.last);\n\
+\n\
+// ^load os from node_modules\n\
+var os = require(\'os\');\n\
+console.log("platform :" + os.platform());</pre>';
 	
-	var sandbox1 = '<iframe src="http://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_1" width="100%" height="__window height__" frameborder="0"></iframe>';
-	var sandbox2 = '<iframe src="http://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_2" width="100%" height="__window height__" frameborder="0"></iframe>';
+	var sandbox1 = '<iframe src="https://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_1" width="100%" height="__window height__" frameborder="0"></iframe>';
+	var sandbox2 = '<iframe src="https://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_2" width="100%" height="__window height__" frameborder="0"></iframe>';
 
 	var markers = [
 		{ depth: "1,0", start: 5, end: 15, id: "code1", text: "Click here for the code", type: "code", html: code1 },
 		{ depth: "1,0", start: 8, end: 12, id: "sandbox1", text: "Click here to try it out", type: "sandbox", html: sandbox1 },
 		{ depth: "1,0", start: 12, end: 15, id: "sandbox2", text: "Click here to try out this code too", type: "sandbox", html: sandbox2 },
 
-        { depth: "1,0", start: 15, end: 20, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1" },
+        { depth: "1,0", start: 15, end: 20, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg" },
 
-		{ depth: "1,0", start: 20, end: 25, id: "quiz1", text: "Click here for efficacy", type: "quiz" },
 		{ depth: "1,0", start: 22, end: 27, id: "project1", text: "Click here for project files", type: "files" },
 
-		{ depth: "1,1", start: 18, end: 23, type: "epub", src: "learningnodejs", page: "ch01.html#ch01_ch01" },
+		{ depth: "1,0", start: 30, end: 35, type: "extra", text: "Test what you've learned with this quiz", src: "extras/Module_01/index.html" },
 
-		{ depth: "1,1", start: 26, end: 31, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1" },
-		{ depth: "1,1", start: 58, end: 63, type: "epub", src: "nodejsmongodbangularjs", page: "ch13.html#page_227" },
+		{ depth: "1,1", start: 18, end: 23, type: "epub", text: "Read about this in a chapter from <strong>Learning Node.js</strong>", src: "learningnodejs", page: "ch01.html#ch01_ch01", title: "Learning Node.js", cover: "9780133377989.jpg" },
 
-		{ depth: "1,2", start: 18, end: 23, type: "epub", src: "learningnodejs", page: "ch04.html#ch04_ch04" },
+		{ depth: "1,1", start: 26, end: 31, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg" },
+		{ depth: "1,1", start: 58, end: 63, type: "epub", src: "nodejsmongodbangularjs", page: "ch13.html#page_227", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg" },
 
-		{ depth: "1,2", start: 42, end: 47, type: "epub", src: "learningangularjs", page: "ch01.html#ch01lev1sec1" },
+		{ depth: "1,2", start: 18, end: 23, type: "epub", src: "learningnodejs", page: "ch04.html#ch04_ch04", title: "Learning Node.js", cover: "9780133377989.jpg" },
 
-		{ depth: "1,3", start: 11, end: 16, type: "epub", src: "learningnodejs", page: "ch05.html#ch05_ch05" },
+		{ depth: "1,2", start: 42, end: 47, type: "epub", src: "learningangularjs", page: "ch01.html#ch01lev1sec1", title: "Learning Angular.js", cover: "9780134034614.jpg" },
 
-		{ depth: "1,4", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch03.html#ch03_ch03" },
+		{ depth: "1,2", start: 56, end: 172, type: "code", text: "Click here to see the Node.js code", html: code2 },
 
-		{ depth: "1,5", start: 15, end: 20, type: "epub", src: "learningnodejs", page: "ch04.html#ch04lev1sec6" },
+		{ depth: "1,3", start: 11, end: 16, type: "epub", src: "learningnodejs", page: "ch05.html#ch05_ch05", title: "Learning Node.js", cover: "9780133377989.jpg" },
 
-		{ depth: "1,6", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch06.html#ch06_ch06" }
+		{ depth: "1,4", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch03.html#ch03_ch03", title: "Learning Node.js", cover: "9780133377989.jpg" },
+
+		{ depth: "1,5", start: 15, end: 20, type: "epub", src: "learningnodejs", page: "ch04.html#ch04lev1sec6", title: "Learning Node.js", cover: "9780133377989.jpg" },
+
+		{ depth: "1,6", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch06.html#ch06_ch06", title: "Learning Node.js", cover: "9780133377989.jpg" }
 	];
 
 	return { toc: toc, markers: markers };

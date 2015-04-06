@@ -11,7 +11,7 @@
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/video-js.min.css" rel="stylesheet">
 	<link href="css/bootstrap-dialog.min.css" rel="stylesheet">
-    <link href="../../CommonJavascript/widgets/css/coach-marks.css" rel="stylesheet">
+    <link href="/widgets/css/coach-marks.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
 
     <link href="http://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet" type="text/css">
@@ -24,8 +24,8 @@
 <div class="toc-viewer"></div>
 
 <header id="main-bar" class="navbar navbar-inverse navbar-fixed-top" role="banner">
-	<button id="toc-toggler" data-coach="Show and hide the Table of Contents." data-coach-pos="bottom" class="btn btn-primary pull-left"><i class="fa fa-bars"></i></button>
-    <button id="resource-toggler" data-coach="Show and hide the Extras." data-coach-pos="bottom" class="btn btn-primary pull-right"><i class="fa fa-suitcase"></i></button>
+	<button id="toc-toggler" data-coach="Show and hide the Table of Contents." data-coach-pos="bottom" title="Show and hide the video list." class="btn btn-primary pull-left"><i class="fa fa-bars"></i></button>
+    <button id="resource-toggler" data-coach="Show and hide the Resources." title="Show and hide the Resources." data-coach-pos="bottom" class="btn btn-primary pull-right"><i class="fa fa-suitcase"></i></button>
 	<div class="container">
 		<nav role="navigation">
 			<div class="navbar-collapse collapse">
@@ -46,7 +46,7 @@
 					</div>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li data-coach="Access your account information here." data-coach-pos="bottom"><a href="">Account</a></li>
+					<li data-coach="Access your account information here." data-coach-pos="bottom"><a href="" title="Access your InformIT Account Page.">Account</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -129,7 +129,7 @@
 		<div id="sidebar" class="col-xs-3">
 			<div id="resources" role="tabpanel">
 				<ul class="nav nav-tabs" role="tablist">
-					<li role="presentation" class="active"><a href="#assets" role="tab" data-toggle="tab">Assets</a></li>
+					<li role="presentation" class="active"><a href="#assets" role="tab" data-toggle="tab">Resources</a></li>
 					<li role="presentation"><a href="#bookmarks" role="tab" data-toggle="tab">Bookmarks</a></li>
 				</ul>
 				<div class="tab-content">
