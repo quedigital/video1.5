@@ -70,6 +70,11 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 		},
 		
 		playFromTOC: function (index, options) {
+			if (this.toc[index].src) {
+				this.playExtraFromTOC(index, options);
+				return;
+			}
+
 			while (index < this.toc.length && !this.toc[index].video) {
 				index++;
 			}
@@ -88,6 +93,9 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 				this.player.currentTime(options.time);
 			}
 
+			$("#main_iframe").hide();
+			$("#main_video").show();
+
 			if (options && options.pause) {
 			} else {
 				this.player.play();
@@ -95,6 +103,26 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 
 			this.currentIndex = index;
 			
+			this.updateUI();
+
+			var showAllMarkers = options && options.showAllMarkers;
+
+			this.addMarkers(showAllMarkers);
+
+			this.removeAllTriggers();
+			this.addTriggersForThisVideo();
+
+			this.saveCurrentVideoIndex();
+		},
+
+		playExtraFromTOC: function (index, options) {
+			console.log("open " + this.toc[index].src);
+			$("#main_iframe").attr("src", this.toc[index].src).show();
+			$("#main_video").hide();
+			this.player.pause();
+
+			this.currentIndex = index;
+
 			this.updateUI();
 
 			var showAllMarkers = options && options.showAllMarkers;
@@ -133,82 +161,91 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 			$(".nav-list.toc a").eq(this.currentIndex).hide(0).addClass("active animated slideInLeft").show(0);
 		},
 		
-		onShowSandbox: function (event) {
-			this.player.pause();
-		
-			var wh = $(window).outerHeight();
-		
-			var title = $(event.target).text();
-	
-			var contents;	
-			
-			if (title == "Sandbox 1") {
-				contents = '<iframe src="http://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_1" width="100%" height="' + (wh * .75) + '" frameborder="0"></iframe>';
-			} else {
-				contents = '<iframe src="http://pearson.programmr.com/embed.php?action=tf&amp;path=pearson/files/jquerybook/listing2_2" width="100%" height="' + (wh * .75) + '" frameborder="0"></iframe>';
-			}
-		
-			BootstrapDialog.show({
-				title: title,
-				message: contents,
-				size: BootstrapDialog.SIZE_WIDE
-			});
-		},
-		
 		addMarkers: function (showAllMarkers) {
 			var curDepth = this.toc[this.currentIndex].depth;
 
-			var container = $("#assets .scroller");
-			
-			container.empty();
+			var data = [];
+			var counter = 0;
 			
 			for (var i = 0; i < this.markers.length; i++) {
 				var m = this.markers[i];
 
 				if (m.depth == curDepth) {
-					var el = $("<div>", { class: "alert trackalert" }).attr("role", "alert");
-					if (!showAllMarkers) el.addClass("hidden");
+					var item = {};
 
 					var txt = m.type == "epub" ? (m.text ? m.text : "Click here to read more") : m.text;
 
+					item.depth = (counter++).toString();
+
+					switch (m.type) {
+						case "epub":
+							item.short = "<i class='fa fa-book'></i>";
+							break;
+						case "files":
+						case "code":
+							item.short = "<i class='fa fa-file-code-o'></i>";
+							break;
+						case "extra":
+							item.short = "<i class='fa fa-question-circle'></i>";
+							break;
+						case "sandbox":
+							item.short = "<i class='fa fa-desktop'></i>";
+							break;
+						default:
+							console.log(m.type);
+							break;
+					}
+
+					item.desc = txt;
+					item.callback = $.proxy(this.onClickMarker, this, i);
+					item.timestamp = String(m.start).toHHMMSS();
+					item.id = i;
+
+					data.push(item);
+/*
+
+//					var el = $("<div>", { class: "alert trackalert" }).attr("role", "alert");
+					var el = $("<div>", { class: "trackalert" });
+					if (!showAllMarkers) el.addClass("x-hidden");
+
+
 					var r = $("<div>", { class: "row"}).appendTo(el);
 
-					var d1 = $("<div>", { class: "col-xs-2" }).appendTo(r);
-					var d2 = $("<div>", { class: "col-xs-7" }).appendTo(r);
-					var d3 = $("<div>", { class: "col-xs-3" }).appendTo(r);
+					var d1 = $("<div>", { class: "col-xs-9" }).appendTo(r);
+					var d2 = $("<div>", { class: "col-xs-3" }).appendTo(r);
 
 					var defaultPlacement = true;
 
 					switch (m.type) {
 						case "code":
-							el.addClass("alert-danger");
+							//el.addClass("alert-danger");
 							break;
 						case "sandbox":
-							el.addClass("alert-info");
+							//el.addClass("alert-info");
 							break;
 						case "quiz":
-							el.addClass("alert-warning");
+							//el.addClass("alert-warning");
 							break;
 						case "files":
-							el.addClass("alert-success");
+							//el.addClass("alert-danger");
 							break;
 						case "epub":
 							var coverURL = "epubs/" + m.src + "/OEBPS/html/graphics/" + m.cover;
 
-							el.addClass("alert-success");
+							//el.addClass("alert-success");
 
 							var cover = $("<img>", { src: coverURL, class: "tiny-thumbnail" });
-							d3.append(cover);
+							d2.append(cover);
 
 							break;
 						case "extra":
-							el.addClass("alert-warning");
+							//el.addClass("alert-danger");
 							break;
 					}
 
 					$("<span>", {class: "badge", text: String(m.start).toHHMMSS()}).appendTo(d1);
 
-					$("<span>", {html: " " + txt}).appendTo(d2);
+					$("<span>", {html: " " + txt}).appendTo(d1);
 
 					el.click($.proxy(this.onClickMarker, this, i));
 
@@ -216,8 +253,12 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 
 					if (!m.elements) m.elements = {};
 					m.elements.alert = el;
+*/
+					m.alert = i;
 				}
 			}
+
+			$(".resource-list").TOCTree("option", "data", data);
 		},
 		
 		addTriggersForThisVideo: function () {
@@ -226,8 +267,8 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 			for (var i = 0; i < this.markers.length; i++) {
 				var m = this.markers[i];
 				if (m.depth == curDepth) {
-					var el = m.elements ? m.elements.alert : undefined;
-					this.pop.timebase( { start: m.start, end: m.end, alert: el, id: this.trackID++, text: m.text,
+					//var el = m.elements ? m.elements.alert : undefined;
+					this.pop.timebase( { start: m.start, end: m.end, alert: m.alert, id: this.trackID++, text: m.text,
 						callback: $.proxy(this.onClickMarker, this, i) } );
 				}
 			}
@@ -310,7 +351,7 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 	                var coverURL = "epubs/" + m.src + "/OEBPS/html/graphics/" + m.cover;
 	                var cover = "<img class='img-thumbnail' src='" + coverURL + "'/>";
 
-	                var contents = '<div class="row"><div class="col-xs-2"><a class="center-block text-center" href="#">' + cover + '<p>Buy it here!</p></a></div><div class="col-xs-10"><iframe src="epubs/' + m.src + '/OEBPS/html/' + m.page + '" width="100%" height="__window height__" frameborder="0"></iframe></div></div>';
+	                var contents = '<div class="row"><div class="col-xs-2"><a class="center-block text-center" href="https://www.informit.com/store/learning-node.js-a-hands-on-guide-to-building-web-applications-9780321910578" target="_blank">' + cover + '<p class="small">Link to the Book</p></a></div><div class="col-xs-10"><iframe src="epubs/' + m.src + '/OEBPS/html/' + m.page + '" width="100%" height="__window height__" frameborder="0"></iframe></div></div>';
 	                var wh = $(window).outerHeight();
 	                contents = contents.replace("__window height__", (wh * .75));
 

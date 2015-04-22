@@ -23,12 +23,10 @@ body {
 	
 	.well {
 		padding-left: 0;
+		padding-right: 0;
+		padding-top: 0;
 		height: 100%;
 		margin-bottom: 0;
-	}	
-	
-	.level {
-		left: -30px;	
 	}
 }
 
@@ -106,6 +104,7 @@ body {
 
 #sidebar {
 	padding: 0;
+	background-color: #eaebff;
 	
 	.well {
 		height: 100%;
@@ -124,7 +123,31 @@ body {
 			outline: none;
 		}
 	}
-	
+
+	.nav-header {
+		text-transform: none;
+		font-weight: normal;
+		padding-right: 0;
+		margin-left: 0;
+		margin-right: 0;
+		min-height: 40px;
+
+		span:not(.tree-toggler) {
+			line-height: 1;
+			display: inline-block;
+		}
+
+		.tree-toggler {
+			color: black;
+		}
+
+		.timestamp {
+			position: absolute;
+			top: 27px;
+			left: -30px;
+		}
+	}
+
 	.nav-tabs > li.active > a {
 		background-color: #eee;
 	}
@@ -143,16 +166,24 @@ body {
 	}
 	
 	.scroller {
-		padding: 10px;
+		padding: 5px;
+		/*
 		margin: 5px;
 		background-color: rgb(221, 240, 230);
 		border: 1px solid rgb(162, 211, 161);
 		border-radius: 10px;
+		*/
 	}
-	
-	.level {
-		margin-bottom: 10px;
-		position: relative;
+
+	.resource-list {
+		li {
+			transition: background-color 1s ease-in-out;
+		}
+
+		li.current {
+			background-color: rgb(231, 219, 218);
+			border-radius: 5px;
+		}
 	}
 }
 
@@ -215,8 +246,18 @@ body {
 }
 
 .trackalert {
-	transition: transform .5s ease-in-out;
-	
+	transition: transform .5s ease-in-out, opacity .5s ease-in-out;
+
+	span {
+		font-size: 12px;
+		line-height: 1em;
+	}
+
+	&.x-hidden {
+		transform: translateX(25px);
+		opacity: .5;
+	}
+
 	&.current {
 		border-color: black;
 	}
@@ -249,6 +290,7 @@ body {
 	min-width: 2em;
 	text-align: center;
 	position: absolute;
+	left: -30px;
 }
 
 #toc-toggler {
@@ -261,6 +303,9 @@ body {
 
 .checked {
 	color: orange;
+	position: absolute;
+	left: -60px;
+	top: 6px;
 }
 
 .video-js {
@@ -289,4 +334,40 @@ body {
 
 .tiny-thumbnail {
 	width: 100%;
+}
+
+.quiz {
+	color: #BE7C3A;
+}
+
+.quiz-background {
+	background-color: #be7c3a;
+}
+
+#main_iframe {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	display: none;
+}
+
+#md-detector {
+	position: absolute;
+	top: 0;
+	left: 0;
+	color: white;
+	z-index: 100000;
+}
+
+.course-progress {
+	text-align: center;
+	margin: 0;
+	padding: 12px;
+	background-color: #e0e0e0;
+
+	.progress {
+		margin-bottom: 0;
+	}
 }

@@ -1,6 +1,6 @@
 (function (Popcorn) {  
 	var overlay = "#video .overlay";
-	var offsetX = 500;
+	var offsetX = 25;
     var USING_VIDEO_OVERLAYS = false;
 
 	Popcorn.plugin("timebase", {
@@ -28,34 +28,37 @@
 		},
 		
 		show: function (track) {
-			console.log("SHOWING TIMED EVENT");
-			console.log(track);
-
             if (USING_VIDEO_OVERLAYS) {
                 var vo = $(overlay).VideoOverlay("instance");
                 vo.add({id: track.id, text: track.text, callback: track.callback});
             }
 
+			$(".resource-list").find("li[id=" + track.alert + "]").addClass("current");
+			/*
 			if ($(track.alert).hasClass("show-all")) {
 				$(track.alert).addClass("current");
 			}
 			
 			$(track.alert).css( { transform: "translateX(" + offsetX + "px)" } );
-			$(track.alert).removeClass("hidden");
+			$(track.alert).removeClass("x-hidden");
 			setTimeout(function () {
 				$(track.alert).css( { transform: "translateX(0)" } );
 			}, 0);
+			*/
 		},
 		
 		hide: function (track) {
 			var vo = $(overlay).VideoOverlay("instance");
 			vo.remove(track.id);
-			
+
+			$(".resource-list").find("li[id=" + track.alert + "]").removeClass("current");
+			/*
 			if (!$(track.alert).hasClass("show-all")) {
-				$(track.alert).removeClass("hidden current").css( { transform: "translateX(0)" } ).css( { transform: "translateX(" + offsetX + "px)" } ).animate( { _dummy: 0 }, { duration: 500, done: function (anim) { $(anim.elem).addClass("hidden"); } });
+				$(track.alert).removeClass("x-hidden current").css( { transform: "translateX(0)" } ).css( { transform: "translateX(" + offsetX + "px)" } ).animate( { _dummy: 0 }, { duration: 500, done: function (anim) { $(anim.elem).addClass("x-hidden"); } });
 			} else {
 				$(track.alert).removeClass("current");
 			}
+			*/
 		}
 	});
 })(Popcorn);

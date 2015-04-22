@@ -8,6 +8,7 @@ requirejs.config({
 		"bootstrap-dialog": "bootstrap-dialog.min",
 		"imagesloaded": "imagesloaded.pkgd.min",
 		"popcorn": "popcorn-complete.min",
+		"bootstrap-toolkit": "bootstrap-toolkit.min"
         //"coach-marks": "/widgets/js/coach-marks"
 	},
 	
@@ -36,6 +37,10 @@ requirejs.config({
 			export: "Popcorn",
 			deps: ['popcorn']
 		},
+		"bootstrap-toolkit": {
+			export: "$",
+			deps: ["jquery"]
+		},
 		"video": {
 			export: "videojs"
 		}
@@ -43,11 +48,13 @@ requirejs.config({
 });
 
 //require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "coach-marks"], function (metadata, VideoManager) {
-require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap"], function (metadata, VideoManager) {
+require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "bootstrap-toolkit"], function (metadata, VideoManager) {
 
 	var coachMarksShown = false;
 
 	$(".toc").TOCTree({ data: metadata.toc });
+
+	$(".resource-list").TOCTree();//{ data: metadata.temp_markers });
 	
 	var v = $("#video .overlay").VideoOverlay();
 
@@ -60,11 +67,15 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 	$(".trackalert").addClass("hidden");
 	
 	var video = $("video");
-	video[0].addEventListener('loadeddata', function() {
-		console.log("loadeddata");
+	video[0].addEventListener('loadeddata', function () {
 		initialize();
 	}, false);
-	
+
+	var iframe = $("#main_iframe");
+	iframe[0].addEventListener('load', function () {
+		initialize();
+	}, false);
+
 	function initialize () {
 		onResize();
 		
@@ -93,6 +104,9 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
             $(el).outerHeight(wh - t - 5);
         });
 
+		// kludge to subtract main menu bar and course progress
+		$("#contents .scroller").height(wh - 50 - 50);
+
 		$("#main_video").css("max-height", wh - 50);
 	}
 	
@@ -105,53 +119,72 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 			$(".trackalert").css( { transform: "translateX(0)" } ).addClass("hidden");
 		}
 	}
-	
-	function onToggleTOC () {
-		var contentsVisible = $("#contents .well").is(":visible");
-        var resourcesVisible = $("#sidebar #resources").is(":visible");
-        var videoSize = 12 - (contentsVisible ? 0 : 3) - (resourcesVisible ? 3 : 0);
+
+	function resizePanes (contentsVisible, resourcesVisible) {
+		var md = ResponsiveBootstrapToolkit.is(">=md")
+
+		// xs = 3, 6, 3
+		// md = 3, 7, 2
+
+		var contentsSize = 3, resourcesSize = md ? 2 : 3;
+
+		var videoSize = 12 - (contentsVisible ? contentsSize : 0) - (resourcesVisible ? resourcesSize : 0);
 
 		if (contentsVisible) {
-			$("#contents").removeClass("col-xs-3").addClass("col-xs-0");
+			$("#contents").removeClass("col-xs-0").addClass("col-xs-" + contentsSize);
 		} else {
-			$("#contents").removeClass("col-xs-0").addClass("col-xs-3");
+			$("#contents").removeClass("col-xs-3").addClass("col-xs-0");
 		}
-        $("#video").removeClass("col-xs-6 col-xs-9").addClass("col-xs-" + videoSize);
 
-        $("#contents .well").toggle("slide");
+		if (resourcesVisible) {
+			$("#sidebar").removeClass("col-xs-0").addClass("col-xs-" + resourcesSize);
+		} else {
+			$("#sidebar").removeClass("col-xs-3 col-xs-2").addClass("col-xs-0");
+		}
+
+		$("#video").removeClass("col-xs-6 col-xs-7 col-xs-8 col-xs-9 col-xs-11 col-xs-12").addClass("col-xs-" + videoSize);
+	}
+	
+	function onToggleTOC () {
+		var contentsVisible =$("#contents .scroller").is(":visible");
+		var resourcesVisible = $("#sidebar").is(":visible");
+
+		resizePanes(!contentsVisible, resourcesVisible);
+
+        $("#contents .scroller").toggle("slide");
 
 		onResize();
 	}
 
     function onToggleResources () {
-        var contentsVisible = $("#contents .well").is(":visible");
-        var resourcesVisible = $("#sidebar #resources").is(":visible");
-        var videoSize = 12 - (contentsVisible ? 3 : 0) - (resourcesVisible ? 0 : 3);
+	    var contentsVisible =$("#contents .scroller").is(":visible");
+	    var resourcesVisible = $("#sidebar").is(":visible");
 
-        if (resourcesVisible) {
-            $("#sidebar").removeClass("col-xs-3").addClass("col-xs-0");
-        } else {
-            $("#sidebar").removeClass("col-xs-0").addClass("col-xs-3");
-        }
-        $("#video").removeClass("col-xs-6 col-xs-9").addClass("col-xs-" + videoSize);
+	    resizePanes(contentsVisible, !resourcesVisible);
 
-        $("#sidebar #resources").toggle("slide", { direction: "right", done: onResize });
+        $("#sidebar").toggle("slide", { direction: "right", done: onResize });
 
         //onResize();
     }
 
-    function onPlayVideo (element, depth, src) {
+    function onPlayVideo (element, depth) {
 	    var showAllMarkers = $(".show-all-markers").hasClass("active");
 
 		VideoManager.playFromTOC(depth, { showAllMarkers: showAllMarkers });
+	}
+
+	function onClickMarker (element, depth) {
+		console.log("here we are");
+		console.log(element);
+		console.log(depth);
 	}
 		
 	$(".show-all-markers").click(onShowAllMarkers);
 	$("#toc-toggler").click(onToggleTOC);
     $("#resource-toggler").click(onToggleResources);
 	$("a[data-toggle='tab']").on("shown.bs.tab", onResize);
-//	$(".sandbox").click(onShowSandbox);
 	$(".toc").on("playvideo", onPlayVideo);
+	$(".resource-list").on("playvideo", onClickMarker);
 
 	$("body").tooltip();
 
@@ -161,5 +194,6 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 	
 	//VideoManager.loadFirstVideo();
 	VideoManager.loadMostRecentVideo();
-	
+
+	resizePanes(true, true);
 });

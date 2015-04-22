@@ -11,12 +11,12 @@
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/video-js.min.css" rel="stylesheet">
 	<link href="css/bootstrap-dialog.min.css" rel="stylesheet">
-    <link href="/widgets/css/coach-marks.css" rel="stylesheet">
+	<link href="/widgets/css/coach-marks.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
 
-    <link href="http://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet" type="text/css">
+	<link href="http://fonts.googleapis.com/css?family=Permanent+Marker" rel="stylesheet" type="text/css">
 
-    <script	data-main="main" src="js/require.js"></script>
+	<script	data-main="main" src="js/require.js"></script>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
 
 <header id="main-bar" class="navbar navbar-inverse navbar-fixed-top" role="banner">
 	<button id="toc-toggler" data-coach="Show and hide the Table of Contents." data-coach-pos="bottom" title="Show and hide the video list." class="btn btn-primary pull-left"><i class="fa fa-bars"></i></button>
-    <button id="resource-toggler" data-coach="Show and hide the Resources." title="Show and hide the Resources." data-coach-pos="bottom" class="btn btn-primary pull-right"><i class="fa fa-suitcase"></i></button>
+	<button id="resource-toggler" data-coach="Show and hide the Resources." title="Show and hide the Resources." data-coach-pos="bottom" class="btn btn-primary pull-right"><i class="fa fa-suitcase"></i></button>
 	<div class="container">
 		<nav role="navigation">
 			<div class="navbar-collapse collapse">
@@ -53,170 +53,35 @@
 	</div>
 </header>
 
+<div id="md-detector" class="visible-md">This should be visible on medium</div>
+
 <div id="main" class="container-fluid invisible">
 	<div class="row">
 		<div id="contents" class="col-xs-3">
-			<div class="well">
-			    <div class="scroller">
-			        <ul class="nav nav-list toc">
-			            <li><label class="tree-toggler nav-header"><span class="level depth0">1.0</span> Introduction</label>
-			                <ul class="nav nav-list tree">
-			                    <li><a href="#">Who Should Read This Book <i class="checked fa fa-check-circle fa-lg"></i></a></li>
-			                    <li><a href="#">Why You Should Read This Book <i class="checked fa fa-check-circle fa-lg"></i></a></li>
-			                    <li><label class="tree-toggler nav-header"><span class="level depth2">1.0.1</span> Introducing the Node.js-to-AngularJS Stack</label>
-			                        <ul class="nav nav-list tree">
-			                            <li><a href="#">Understanding the Basic Web Development Framework</a></li>
-			                            <li><a href="#">Understanding the Node.js-to-AngularJS Stack Components</a></li>
-			                        </ul>
-			                    </li>
-			                    <li><label class="tree-toggler nav-header"><span class="level depth2">1.0.2</span> JavaScript Primer</label>
-			                        <ul class="nav nav-list tree">
-			                            <li><a href="#">Defining Variables</a></li>
-			                            <li><a href="#">Understanding JavaScript Data Types</a></li>
-			                        </ul>
-			                    </li>
-			                </ul>
-			            </li>
-			            <!--<li class="divider"></li>-->
-			            <li><label class="tree-toggler nav-header"><span class="level depth0">1.1</span> Learning Node.js</label>
-			                <ul class="nav nav-list tree">
-			                    <li><label class="tree-toggler nav-header"><span class="level depth2">1.1.1</span> Getting Started with Node.js</label>
-			                        <ul class="nav nav-list tree">
-			                            <li><a href="#">Understanding Node.js</a></li>
-			                            <li><a href="#">Installing Node.js</a></li>
-			                        </ul>
-			                    </li>
-			                    <li><label class="tree-toggler nav-header"><span class="level depth2">1.1.2</span> Using Events, Listeners, Timers, and Callbacks in Node.js</label>
-			                        <ul class="nav nav-list tree">
-			                            <li><a href="#">Understanding the Node.js Event Model</a></li>
-			                            <li><a href="#">Adding Work to the Event Queue</a></li>
-			                        </ul>
-			                    </li>
-			                    <li><label class="tree-toggler nav-header"><span class="level depth2">1.1.3</span> Handling Data I/O in Node.js</label>
-			                        <ul class="nav nav-list tree">
-			                            <li><a href="#">Working with JSON</a></li>
-			                            <li><a href="#">Using the <code>Buffer</code> Module to Buffer Data</a></li>
-			                            <li><a href="#">Using the <code>Stream</code> Module to Stream Data</a></li>
-			                            <li><a href="#">Compressing and Decompressing Data with Zlib</a></li>
-			                            <li><a href="#">Summary</a></li>
-			                            <li><a href="#">Up Next</a></li>
-			                        </ul>
-			                    </li>
-			                    <li><label class="tree-toggler nav-header"><span class="level depth2">1.1.4</span> Accessing the File System from Node.js</label>
-			                        <ul class="nav nav-list tree">
-			                            <li><a href="#">Synchronous Versus Asynchronous File System Calls</a></li>
-			                            <li><a href="#">Opening and Closing Files</a></li>
-			                            <li><a href="#">Writing Files</a></li>
-			                            <li><a href="#">Reading Files</a></li>
-			                            <li><a href="#">Other File System Tasks</a></li>
-			                            <li><a href="#">Summary</a></li>
-			                            <li><a href="#">Up Next</a></li>
-			                        </ul>
-			                    </li>
-			                </ul>
-			            </li>
-			        </ul>
-			    </div>
-			</div>
+                <div class="course-progress">
+                    <div class="progress">
+                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
+                            <span>40% Complete)</span>
+                        </div>
+                    </div>
+                </div>
+				<div class="scroller">
+					<ul class="nav nav-list toc">
+					</ul>
+				</div>
 		</div>
 		<div id="video" class="col-xs-6">
 			<div class="video-holder">
-				<div class="overlay"></div>
+                <div class="overlay"></div>
 				<video poster="video/lesson_1_0.jpg" class="video-js vjs-default-skin vjs-big-play-centered" id="main_video" controls>
 				</video>
+                <iframe id="main_iframe" frameborder="0"></iframe>
 			</div>
 		</div>
 		<div id="sidebar" class="col-xs-3">
-			<div id="resources" role="tabpanel">
-				<ul class="nav nav-tabs" role="tablist">
-					<li role="presentation" class="active"><a href="#assets" role="tab" data-toggle="tab">Resources</a></li>
-					<li role="presentation"><a href="#bookmarks" role="tab" data-toggle="tab">Bookmarks</a></li>
-				</ul>
-				<div class="tab-content">
-					<div role="tabpanel" class="tab-pane fade in active" id="assets">		
-						<div id="asset-buttons" class="text-center">
-							<div class="btn-group" role="group">
-								<button class="show-all-markers btn btn-success" data-toggle="button">Show All</button><button class="btn btn-info">Download All</button>
-							</div>
-						</div>
-						<div class="scroller">
-							<div class="level alert1 trackalert">1.0 Introduction</div>
-							<div data-toggle="collapse" data-target="#code1" class="alert1 alert alert-success trackalert" role="alert">
-								<span class="badge">0:05</span> Code goes <a href="#" class="alert-link">here</a>
-							
-								<div class="clippable">
-									<pre id="code1" class="collapse"><span class="btn-clipboard">Copy</span><!--
-		-->var censoredWords = ["sad", "bad", "mad"];
-		var customCensoredWords = [];
-		function censor(inStr) {
-			for (idx in censoredWords) {
-				inStr = inStr.replace(censoredWords[idx], "****");
-			}
-			for (idx in customCensoredWords) {
-				inStr = inStr.replace(customCensoredWords[idx], "****");
-			}
-			return inStr;
-		}
-		function addCensoredWord(word){
-			customCensoredWords.push(word);
-		}
-		function getCensoredWords(){
-			return censoredWords.concat(customCensoredWords);
-		}
-		exports.censor = censor;
-		exports.addCensoredWord = addCensoredWord;
-		exports.getCensoredWords = getCensoredWords;<!--
-									--></pre>
-								</div>
-							</div>
-							
-							<div class="alert1a alert alert-danger trackalert" role="alert">
-								<span class="badge">0:08</span> <span class="sandbox">Sandbox 1</span>
-							</div>
-							
-							<div class="alert1b alert alert-success trackalert" role="alert">
-								<span class="badge">0:12</span> <span class="sandbox">Sandbox 2</span>
-							</div>
-							
-							<div class="level alert2 trackalert">1.1.1 Getting Started With Node.js</div>
-							<div class="alert2 alert alert-info alert-dismissible trackalert" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<span class="badge">0:20</span> <strong>Quiz</strong> self-check
-							</div>
-							<div data-toggle="collapse" data-target="#project1" class="alert3 alert alert-warning trackalert" role="alert">
-								<span class="badge">0:22</span><a href="#" class="alert-link"> Project files</a>
-
-								<div class="clippable">
-									<pre id="project1" class="collapse"><span class="btn-download">Download</span><!--
-		-->File 1.js
-	File 2.css
-	assets\File 3.png<!--
-									--></pre>
-								</div>
-
-							</div>
-							<div class="alert4 alert alert-danger trackalert" role="alert">
-								<span class="badge">0:23</span> <strong>Read More </strong>in depth
-							</div>
-						</div>
-					</div>
-					<div role="tabpanel" class="tab-pane fade" id="bookmarks">
-						<div class="scroller">
-							<div class="alert alert-info alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<span class="badge">0:23</span> Review this function later
-							</div>
-							<div class="alert alert-success alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<span class="badge">0:47</span> This snippet could be useful.
-							</div>
-							<div class="alert alert-warning alert-dismissible" role="alert">
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-								<span class="badge">1:05</span> This is what Derek was referring to.
-							</div>
-						</div>
-					</div>
-				</div>
+            <div class="scroller">
+                <ul class="nav nav-list resource-list">
+                </ul>
 			</div>
 		</div>
 	</div>

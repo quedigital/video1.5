@@ -1,3 +1,6 @@
+// TODO: scroll resource markers to keep the current one in the middle
+// TODO: get coach-marks to load from library
+// TODO: indicate completed TOC rows with check mark
 // TODO: clear events from popcorn when loading new video (it wasn't accounting for the length of the newly-loaded video)
 // TODO: search field (searches TOC and transcript? shows results how?)
 // TODO: do something with transcript? (overlay?)
@@ -25,3 +28,9 @@
 // DONE: tooltips for nav buttons?
 // DONE: add "from this book" at top of "read more" popup (along the left-hand edge; use the wider popup)
 // DONE: add book cover to "read more" markers
+// DONE: scroll alerts slightly
+// DONE: add quizzes to left-hand TOC
+// DONE: smaller resource timeline on right
+// DONE: hide sidebar toc properly
+// DONE: size sidebar and toc for smaller screen widths
+// DONE: highlight current markers in sidebar toc
