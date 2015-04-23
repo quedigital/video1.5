@@ -74,7 +74,8 @@
 
 #sidebar {
   padding: 0;
-  background-color: #eaebff; }
+  background-color: #eaebff;
+  display: none; }
   #sidebar .well {
     height: 100%;
     margin-bottom: 0; }

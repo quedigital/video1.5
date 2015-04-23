@@ -127,28 +127,28 @@ console.log("platform :" + os.platform());</pre>';
 
 		{ depth: "1,1", start: 22, end: 27, id: "project1", text: "Click here to download the project files for this particular example.", type: "files" },
 
-		{ depth: "1,1", start: 26, end: 31, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg", text: "Click here to read more about the install process." },
+//		{ depth: "1,1", start: 26, end: 31, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg", text: "Click here to read more about the install process." },
 
 		{ depth: "1,1", start: 35, end: 40, type: "extra", text: "<span class='quiz'>Test what you've learned with this quiz</span>", src: "extras/Module_01/index.html" },
 
-		{ depth: "1,1", start: 58, end: 63, type: "epub", src: "nodejsmongodbangularjs", page: "ch13.html#page_227", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg", text: "Click here for more details about MongoDB installation." },
+//		{ depth: "1,1", start: 58, end: 63, type: "epub", src: "nodejsmongodbangularjs", page: "ch13.html#page_227", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg", text: "Click here for more details about MongoDB installation." },
 
-		{ depth: "1,2", start: 18, end: 23, type: "epub", src: "learningnodejs", page: "ch04.html#ch04_ch04", title: "Learning Node.js", cover: "9780133377989.jpg", text: "Click here to read more about writing simple applications." },
+//		{ depth: "1,2", start: 18, end: 23, type: "epub", src: "learningnodejs", page: "ch04.html#ch04_ch04", title: "Learning Node.js", cover: "9780133377989.jpg", text: "Click here to read more about writing simple applications." },
 
-		{ depth: "1,2", start: 42, end: 47, type: "epub", src: "learningangularjs", page: "ch01.html#ch01lev1sec1", title: "Learning Angular.js", cover: "9780134034614.jpg", text: "Click here to read more about setting up a development environment for Node.js." },
+//		{ depth: "1,2", start: 42, end: 47, type: "epub", src: "learningangularjs", page: "ch01.html#ch01lev1sec1", title: "Learning Angular.js", cover: "9780134034614.jpg", text: "Click here to read more about setting up a development environment for Node.js." },
 
 		{ depth: "1,2", start: 56, end: 172, type: "code", text: "Click here to see or copy the Node.js code I'm talking about here.", html: code2 },
 
 		{ depth: "1,2", start: 61, end: 66, id: "sandbox1", text: "Click here to try it out this exact code in a live sandbox.", type: "sandbox", html: sandbox1 },
 		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
 
-		{ depth: "1,3", start: 11, end: 16, type: "epub", src: "learningnodejs", page: "ch05.html#ch05_ch05", title: "Learning Node.js", cover: "9780133377989.jpg", text: "Click here to read more about modules." },
+//		{ depth: "1,3", start: 11, end: 16, type: "epub", src: "learningnodejs", page: "ch05.html#ch05_ch05", title: "Learning Node.js", cover: "9780133377989.jpg", text: "Click here to read more about modules." },
 
-		{ depth: "1,4", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch03.html#ch03_ch03", title: "Learning Node.js", cover: "9780133377989.jpg" },
+//		{ depth: "1,4", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch03.html#ch03_ch03", title: "Learning Node.js", cover: "9780133377989.jpg" },
 
-		{ depth: "1,5", start: 15, end: 20, type: "epub", src: "learningnodejs", page: "ch04.html#ch04lev1sec6", title: "Learning Node.js", cover: "9780133377989.jpg" },
+//		{ depth: "1,5", start: 15, end: 20, type: "epub", src: "learningnodejs", page: "ch04.html#ch04lev1sec6", title: "Learning Node.js", cover: "9780133377989.jpg" },
 
-		{ depth: "1,6", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch06.html#ch06_ch06", title: "Learning Node.js", cover: "9780133377989.jpg" }
+//		{ depth: "1,6", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch06.html#ch06_ch06", title: "Learning Node.js", cover: "9780133377989.jpg" }
 	];
 
 	var temp_markers = [

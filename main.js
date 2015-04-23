@@ -195,5 +195,5 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 	//VideoManager.loadFirstVideo();
 	VideoManager.loadMostRecentVideo();
 
-	resizePanes(true, true);
+	resizePanes(true, false);
 });
