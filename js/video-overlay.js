@@ -14,7 +14,7 @@ define(["jquery.ui"], function () {
 		},
 		
 		add: function (options) {
-			var d = $("<div>", { class: "overlay-block", text: options.text });
+			var d = $("<div>", { class: "overlay-block", html: options.text });
 			
 			if (options.callback) {
 				d.click(options.callback);

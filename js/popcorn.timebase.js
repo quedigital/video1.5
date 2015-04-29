@@ -1,7 +1,7 @@
 (function (Popcorn) {  
 	var overlay = "#video .overlay";
 	var offsetX = 25;
-    var USING_VIDEO_OVERLAYS = false;
+    var USING_VIDEO_OVERLAYS = true;
 
 	Popcorn.plugin("timebase", {
 		_setup: function (track) {
@@ -15,6 +15,8 @@
 		},
 		
 		_teardown: function (track) {
+			var vo = $(overlay).VideoOverlay("instance");
+			vo.remove(track.id);
 		},
 		
 		start: function (event, track) {

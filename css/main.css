@@ -220,6 +220,10 @@
   left: -60px;
   top: 6px; }
 
+span.completed {
+  font-weight: 200;
+  color: #bda3ad; }
+
 .video-js {
   width: 100% !important;
   height: 100% !important; }
@@ -271,5 +275,14 @@
   background-color: #e0e0e0; }
   .course-progress .progress {
     margin-bottom: 0; }
+
+#collapse-button {
+  margin-right: 10px; }
+
+.vjs-back-button:hover:not(:active) {
+  color: white; }
+.vjs-back-button:before {
+  font-family: FontAwesome !important;
+  content: "\f0e2"; }
 
 /*# sourceMappingURL=main.css.map */

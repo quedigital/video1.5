@@ -99,6 +99,11 @@ define(["jquery.ui"], function () {
 			}
 
 			this._super( "_setOption", key, value );
+		},
+
+		search: function (term) {
+			this.element.find("li:contains('" + term + "')").show(300);
+			this.element.find("li:not(:contains('" + term + "'))").hide(300);
 		}
 	});
 });

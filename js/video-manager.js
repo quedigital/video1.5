@@ -17,6 +17,19 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 		return time;
 	};
 
+	videojs.BackButton = videojs.Button.extend({});
+
+	videojs.BackButton.prototype.buttonText = 'Back 10';
+
+	videojs.BackButton.prototype.buildCSSClass = function (){
+		return 'vjs-back-button ' + videojs.Button.prototype.buildCSSClass.call(this);
+	};
+
+	videojs.BackButton.prototype.onClick = function (){
+		var t = this.player().currentTime();
+		this.player().currentTime(t - 10);
+	};
+
 	var VideoManager = {
 		initialize: function (toc, el, player, markers) {
 			this.toc = toc;
@@ -25,13 +38,16 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 			this.player = player;
 
 			this.pop = Popcorn(el, { frameAnimation: true });
-			
+
+			var backButton = new videojs.BackButton( this.player );
+			this.player.controlBar.addChild(backButton);
+
 			this.player.on("ended", $.proxy(this.onVideoEnded, this));
 			this.player.on("timeupdate", $.proxy(this.saveCurrentVideoTime, this));
 			
 			this.currentIndex = undefined;
 
-			this.trackID = 0;
+			this.trackID = 1;
 		},
 
 		saveCurrentVideoIndex: function () {
@@ -284,7 +300,7 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 
 			this.pop = Popcorn(this.el, { frameAnimation: true });
 
-			this.trackID = 0;
+			this.trackID = 1;
 		},
 		
 		onClickMarker: function (index) {

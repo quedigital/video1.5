@@ -309,6 +309,11 @@ body {
 	top: 6px;
 }
 
+span.completed {
+	font-weight: 200;
+	color: rgb(189, 163, 173);
+}
+
 .video-js {
     width: 100% !important;
 	height: 100% !important;
@@ -370,5 +375,20 @@ body {
 
 	.progress {
 		margin-bottom: 0;
+	}
+}
+
+#collapse-button {
+	margin-right: 10px;
+}
+
+.vjs-back-button {
+	&:hover:not(:active) {
+		color: white;
+	}
+
+	&:before {
+		font-family: FontAwesome !important;
+		content: "\f0e2";
 	}
 }

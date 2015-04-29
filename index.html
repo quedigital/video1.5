@@ -25,7 +25,7 @@
 
 <header id="main-bar" class="navbar navbar-inverse navbar-fixed-top" role="banner">
 	<button id="toc-toggler" data-coach="Show and hide the Table of Contents." data-coach-pos="bottom" title="Show and hide the video list." class="btn btn-primary pull-left"><i class="fa fa-bars"></i></button>
-	<button id="resource-toggler" data-coach="Show and hide the Resources." title="Show and hide the Resources." data-coach-pos="bottom" class="btn btn-primary pull-right"><i class="fa fa-suitcase"></i></button>
+	<button id="resource-toggler" data-coach="Show and hide the Resources." title="Show and hide the Resources." data-coach-pos="bottom" class="btn btn-primary pull-right">Resources</button>
 	<div class="container">
 		<nav role="navigation">
 			<div class="navbar-collapse collapse">
@@ -59,11 +59,13 @@
 	<div class="row">
 		<div id="contents" class="col-xs-3">
                 <div class="course-progress">
+                    <button id="collapse-button" title="Expand or collapse entire video list." class="btn btn-warning btn-xs pull-left"><i class="fa fa-lg fa-caret-up"></i></button>
                     <div class="progress">
                         <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
                             <span>40% Complete)</span>
                         </div>
                     </div>
+                    <div class="clearfix"></div>
                 </div>
 				<div class="scroller">
 					<ul class="nav nav-list toc">

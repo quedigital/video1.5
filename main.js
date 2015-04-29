@@ -8,7 +8,8 @@ requirejs.config({
 		"bootstrap-dialog": "bootstrap-dialog.min",
 		"imagesloaded": "imagesloaded.pkgd.min",
 		"popcorn": "popcorn-complete.min",
-		"bootstrap-toolkit": "bootstrap-toolkit.min"
+		"bootstrap-toolkit": "bootstrap-toolkit.min",
+		"video": "video.dev"
         //"coach-marks": "/widgets/js/coach-marks"
 	},
 	
@@ -178,6 +179,23 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 		console.log(element);
 		console.log(depth);
 	}
+
+	function expandOrCollapse () {
+		var vis = $(".toc > li > ul").is(":visible");
+
+		if (vis) {
+			$("#collapse-button i").removeClass("fa-caret-up").addClass("fa-caret-down");
+			$(".toc > li > ul").hide(300);
+		} else {
+			$("#collapse-button i").removeClass("fa-caret-down").addClass("fa-caret-up");
+			$(".toc > li > ul").show(300);
+		}
+	}
+
+	function onSearch () {
+		var term = $("#query").val();
+		$(".toc").TOCTree("search", term);
+	}
 		
 	$(".show-all-markers").click(onShowAllMarkers);
 	$("#toc-toggler").click(onToggleTOC);
@@ -185,6 +203,8 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 	$("a[data-toggle='tab']").on("shown.bs.tab", onResize);
 	$(".toc").on("playvideo", onPlayVideo);
 	$(".resource-list").on("playvideo", onClickMarker);
+	$("#collapse-button").click(expandOrCollapse);
+	$(".search-button").click(onSearch);
 
 	$("body").tooltip();
 

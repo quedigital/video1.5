@@ -3,8 +3,8 @@ define([], function () {
 		{ depth: "0", short: "<i class='fa fa-home'></i>", desc: "Introduction" },
 
 		{ depth: "1", short: "1", desc: "Node.js Fundamentals" },
-		{ depth: "1,0", short: "<i class='fa fa-pencil'></i>", desc: "Learning Objectives <i class='checked fa fa-star-half-o fa-lg'></i>", video: "9780133929294-Lesson_1_0.mov" },
-		{ depth: "1,1", short: "1.1", desc: "Set up the Node.js development environment <i class='checked fa fa-star fa-lg'></i>", video: "9780133929294-Lesson_1_1.mov" },
+		{ depth: "1,0", short: "<i class='fa fa-pencil'></i>", desc: "Learning Objectives <i class='checked fa fa-adjust fa-flip-horizontal fa-lg'></i>", video: "9780133929294-Lesson_1_0.mov" },
+		{ depth: "1,1", short: "1.1", desc: "<span class='completed'>Set up the Node.js development environment</span> <i class='checked fa fa-check-circle fa-lg'></i>", video: "9780133929294-Lesson_1_1.mov" },
 		{ depth: "1,1a", short: "<i class='fa fa-question-circle'></i>", desc: "<span class='quiz'>Check yourself with a quiz</span>", src: "extras/Module_01/index.html" },
 		{ depth: "1,2", short: "1.2", desc: "Create a Node.js application", video: "9780133929294-Lesson_1_2.mov" },
 		{ depth: "1,3", short: "1.3", desc: "Create a Node.js module", video: "9780133929294-Lesson_1_3.mov" },
@@ -123,7 +123,7 @@ console.log("platform :" + os.platform());</pre>';
 //        { depth: "1,0", start: 15, end: 20, type: "epub", src: "nodejsmongodbangularjs", page: "ch03.html#ch03lev1sec1", title: "Node.js, MongoDB, and Angular.js", cover: "9780133844344.jpg" },
 
 
-		{ depth: "1,1", start: 18, end: 23, type: "epub", text: "Click here to read about installing Node.js in this chapter from <strong>Learning Node.js</strong>", src: "learningnodejs", page: "ch01.html#ch01_ch01", title: "Learning Node.js", cover: "9780133377989.jpg" },
+//		{ depth: "1,1", start: 18, end: 23, type: "epub", text: "Click here to read about installing Node.js in this chapter from <strong>Learning Node.js</strong>", src: "learningnodejs", page: "ch01.html#ch01_ch01", title: "Learning Node.js", cover: "9780133377989.jpg" },
 
 		{ depth: "1,1", start: 22, end: 27, id: "project1", text: "Click here to download the project files for this particular example.", type: "files" },
 

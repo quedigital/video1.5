@@ -1,3 +1,5 @@
+// TODO: case insensitive search
+// TODO: timeline markers: http://www.sampingchuang.com/videojs-markers
 // TODO: scroll resource markers to keep the current one in the middle
 // TODO: get coach-marks to load from library
 // TODO: indicate completed TOC rows with check mark
@@ -34,3 +36,4 @@
 // DONE: hide sidebar toc properly
 // DONE: size sidebar and toc for smaller screen widths
 // DONE: highlight current markers in sidebar toc
+// DONE: back button
