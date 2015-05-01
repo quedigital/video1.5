@@ -149,9 +149,11 @@
     /* NOTE: Added this because elements using animate.css were disappearing */
     animation-fill-mode: none;
     -webkit-animation-fill-mode: none; }
-    .nav-list > li > a:hover, .nav-list > li > a:focus {
+    .nav-list > li > a:hover, .nav-list > li > a:hover:focus {
       text-decoration: none;
       background-color: #ccc; }
+    .nav-list > li > a:focus {
+      background: none; }
     .nav-list > li > a:active, .nav-list > li > a.active {
       background-color: #C1C0E7;
       color: #191832; }
@@ -274,7 +276,16 @@ span.completed {
   padding: 12px;
   background-color: #e0e0e0; }
   .course-progress .progress {
-    margin-bottom: 0; }
+    margin-bottom: 0;
+    font-size: 11px;
+    line-height: 20px;
+    color: #818186; }
+    .course-progress .progress:after {
+      content: attr(data-progress);
+      display: block;
+      position: absolute;
+      left: 0;
+      right: 0; }
 
 #collapse-button {
   margin-right: 10px; }

@@ -11,6 +11,7 @@
 	<link href="css/font-awesome.min.css" rel="stylesheet">
 	<link href="css/video-js.min.css" rel="stylesheet">
 	<link href="css/bootstrap-dialog.min.css" rel="stylesheet">
+    <link href="css/videojs.markers.min.css" rel="stylesheet">
 	<link href="/widgets/css/coach-marks.css" rel="stylesheet">
 	<link href="css/main.css" rel="stylesheet">
 
@@ -39,14 +40,17 @@
 				</ul>
 				<div class="navbar-form navbar-left" id="search-form" name="search-form">
 					<div class="input-group">
-						<input type="text" class="form-control" placeholder="Search" id="query" name="query" value="">
+                        <div class="input-group-btn">
+                            <button id="clear-search-button" class="btn btn-default" title="Clear search text."><span class="fa fa-times-circle-o fa-lg"></span></button>
+                        </div>
+						<input type="text" class="form-control" placeholder="Search video titles" id="query" name="query" value="">
 						<div class="input-group-btn">
-							<button class="btn btn-success search-button"><span class="glyphicon glyphicon-search"></span></button>
+							<button class="btn btn-success search-button" title="Search video titles."><span class="glyphicon glyphicon-search"></span></button>
 						</div>
 					</div>
 				</div>
 				<ul class="nav navbar-nav navbar-right">
-					<li data-coach="Access your account information here." data-coach-pos="bottom"><a href="" title="Access your InformIT Account Page.">Account</a></li>
+					<li data-coach="Access your account information here." data-coach-pos="bottom"><a href="//memberservices.informit.com/my_account/index.aspx" title="Access your InformIT Account Page.">Account</a></li>
 				</ul>
 			</div>
 		</nav>
@@ -60,9 +64,8 @@
 		<div id="contents" class="col-xs-3">
                 <div class="course-progress">
                     <button id="collapse-button" title="Expand or collapse entire video list." class="btn btn-warning btn-xs pull-left"><i class="fa fa-lg fa-caret-up"></i></button>
-                    <div class="progress">
-                        <div class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
-                            <span>40% Complete)</span>
+                    <div class="progress" data-progress="41% Complete">
+                        <div id="completed-progress" class="progress-bar progress-bar-warning" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: 40%">
                         </div>
                     </div>
                     <div class="clearfix"></div>

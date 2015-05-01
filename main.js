@@ -3,13 +3,15 @@ requirejs.config({
 	paths: {
 		"jquery": "jquery-2.1.3.min",
 		"jquery.ui": "jquery-ui.min",
+		"jquery.json": "jquery.json.min",
 		"bootstrap": "bootstrap",
 		"bootstrap-notify": "bootstrap-notify.min",
 		"bootstrap-dialog": "bootstrap-dialog.min",
 		"imagesloaded": "imagesloaded.pkgd.min",
 		"popcorn": "popcorn-complete.min",
 		"bootstrap-toolkit": "bootstrap-toolkit.min",
-		"video": "video.dev"
+		"videojs": "video.dev",
+		"videojs-markers": "videojs-markers.min"
         //"coach-marks": "/widgets/js/coach-marks"
 	},
 	
@@ -19,6 +21,10 @@ requirejs.config({
 		},
 		"jquery.ui": {
 			export: "$"
+		},
+		"jquery.json": {
+			export: "$",
+			deps: ['jquery']
 		},
 		"bootstrap": {
 			export: "$",
@@ -42,14 +48,17 @@ requirejs.config({
 			export: "$",
 			deps: ["jquery"]
 		},
-		"video": {
+		"videojs": {
 			export: "videojs"
+		},
+		"videojs-markers": {
+			deps: ["video"]
 		}
 	}
 });
 
 //require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "coach-marks"], function (metadata, VideoManager) {
-require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "bootstrap-toolkit"], function (metadata, VideoManager) {
+require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "bootstrap-toolkit"], function (metadata, VideoManager) {
 
 	var coachMarksShown = false;
 
@@ -122,7 +131,7 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 	}
 
 	function resizePanes (contentsVisible, resourcesVisible) {
-		var md = ResponsiveBootstrapToolkit.is(">=md")
+		var md = ResponsiveBootstrapToolkit.is(">=md");
 
 		// xs = 3, 6, 3
 		// md = 3, 7, 2
@@ -196,6 +205,11 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 		var term = $("#query").val();
 		$(".toc").TOCTree("search", term);
 	}
+
+	function onClearSearch () {
+		$("#query").val("");
+		$(".toc").TOCTree("search", "");
+	}
 		
 	$(".show-all-markers").click(onShowAllMarkers);
 	$("#toc-toggler").click(onToggleTOC);
@@ -205,6 +219,7 @@ require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn
 	$(".resource-list").on("playvideo", onClickMarker);
 	$("#collapse-button").click(expandOrCollapse);
 	$(".search-button").click(onSearch);
+	$("#clear-search-button").click(onClearSearch);
 
 	$("body").tooltip();
 

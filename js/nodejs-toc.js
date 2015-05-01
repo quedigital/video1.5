@@ -3,9 +3,9 @@ define([], function () {
 		{ depth: "0", short: "<i class='fa fa-home'></i>", desc: "Introduction" },
 
 		{ depth: "1", short: "1", desc: "Node.js Fundamentals" },
-		{ depth: "1,0", short: "<i class='fa fa-pencil'></i>", desc: "Learning Objectives <i class='checked fa fa-adjust fa-flip-horizontal fa-lg'></i>", video: "9780133929294-Lesson_1_0.mov" },
-		{ depth: "1,1", short: "1.1", desc: "<span class='completed'>Set up the Node.js development environment</span> <i class='checked fa fa-check-circle fa-lg'></i>", video: "9780133929294-Lesson_1_1.mov" },
-		{ depth: "1,1a", short: "<i class='fa fa-question-circle'></i>", desc: "<span class='quiz'>Check yourself with a quiz</span>", src: "extras/Module_01/index.html" },
+		{ depth: "1,0", short: "<i class='fa fa-pencil'></i>", desc: "Learning Objectives", video: "9780133929294-Lesson_1_0.mov" },
+		{ depth: "1,1", short: "1.1", desc: "Set up the Node.js development environment", video: "9780133929294-Lesson_1_1.mov" },
+		{ depth: "1,1a", short: "<i class='fa fa-question-circle'></i>", type: "quiz", desc: "Check yourself with a quiz", src: "extras/Module_01/index.html" },
 		{ depth: "1,2", short: "1.2", desc: "Create a Node.js application", video: "9780133929294-Lesson_1_2.mov" },
 		{ depth: "1,3", short: "1.3", desc: "Create a Node.js module", video: "9780133929294-Lesson_1_3.mov" },
 		{ depth: "1,4", short: "1.4", desc: "Utilize the Node.js callback model", video: "9780133929294-Lesson_1_4.mov" },

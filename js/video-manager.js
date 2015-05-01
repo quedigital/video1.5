@@ -1,4 +1,4 @@
-define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
+define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs-markers"], function (BootstrapDialog, Database) {
 
 	String.prototype.toHHMMSS = function () {
 		var sec_num = parseInt(this, 10);
@@ -31,17 +31,23 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 	};
 
 	var VideoManager = {
-		initialize: function (toc, el, player, markers) {
+		initialize: function (toc, el, player, markers, db) {
 			this.toc = toc;
 			this.el = el;
 			this.markers = markers;
 			this.player = player;
+
+			Database.initialize(toc);
+			$(".toc").TOCTree("setStatus", Database.getItems());
+
+			this.updateProgress();
 
 			this.pop = Popcorn(el, { frameAnimation: true });
 
 			var backButton = new videojs.BackButton( this.player );
 			this.player.controlBar.addChild(backButton);
 
+			this.player.on("play", $.proxy(this.onVideoStarted, this));
 			this.player.on("ended", $.proxy(this.onVideoEnded, this));
 			this.player.on("timeupdate", $.proxy(this.saveCurrentVideoTime, this));
 			
@@ -51,20 +57,20 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 		},
 
 		saveCurrentVideoIndex: function () {
-			localStorage.setItem("PTG:currentIndex", this.currentIndex);
+			Database.saveCurrentIndex(this.currentIndex);
 		},
 
 		saveCurrentVideoTime: function () {
 			var t = this.player.currentTime();
-			localStorage.setItem("PTG:currentTime", t);
+			Database.saveCurrentTime(t);
 		},
 
 		getCurrentVideoTime: function () {
-			return localStorage.getItem("PTG:currentTime");
+			return Database.getCurrentTime();
 		},
 
 		loadMostRecentVideo: function () {
-			var index = localStorage.getItem("PTG:currentIndex");
+			var index = Database.getCurrentIndex();
 
 			if (index == undefined) {
 				this.loadFirstVideo();
@@ -86,6 +92,7 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 		},
 		
 		playFromTOC: function (index, options) {
+			// if this is iframe content, open it now; otherwise, it's video
 			if (this.toc[index].src) {
 				this.playExtraFromTOC(index, options);
 				return;
@@ -167,17 +174,83 @@ define(["bootstrap-dialog", "bootstrap-notify"], function (BootstrapDialog) {
 				this.playFromTOC(this.currentIndex + 1);
 			}
 		},
-		
+
+		onVideoStarted: function () {
+			Database.setItemProperty(this.currentIndex, "started", true);
+			var completed = Database.getItemProperty(this.currentIndex, "completed");
+			if (!completed)
+				this.markItemStarted(this.currentIndex);
+		},
+
 		onVideoEnded: function () {
+			Database.setItemProperty(this.currentIndex, "completed", true);
+			this.markItemCompleted(this.currentIndex);
+
 			this.advanceTOC();
 		},
-		
+
+		markItemStarted: function (index) {
+			$(".toc").TOCTree("markStarted", index);
+		},
+
+		markItemCompleted: function (index) {
+			$(".toc").TOCTree("markCompleted", index);
+
+			this.updateProgress();
+		},
+
 		updateUI: function () {
 			$(".nav-list.toc a").removeClass("active animated tada");
 			$(".nav-list.toc a").eq(this.currentIndex).hide(0).addClass("active animated slideInLeft").show(0);
 		},
+
+		updateProgress: function () {
+			var pct = Math.round(Database.getPercentageComplete() * 100);
+			$("#completed-progress").css("width", pct);
+			// this is used by .progress::after (works on all browsers?)
+			$(".progress").attr("data-progress", pct + "% Complete");
+		},
+
+		addTimelineMarkers: function () {
+			//if (!(this.player.markers instanceof Function)) {
+			//	console.log("destroy");
+				//this.player.markers.destroy();
+			//}
+
+			/*
+			this.player.markers({
+				markerTip: {
+					display: true,
+					text: function (marker) {
+						return marker.text;
+					}
+				},
+				markers: []
+			});
+			*/
+
+			var curDepth = this.toc[this.currentIndex].depth;
+
+			var mz = [];
+
+			for (var i = 0; i < this.markers.length; i++) {
+				var m = this.markers[i];
+
+				if (m.depth == curDepth) {
+					var txt = m.type == "epub" ? (m.text ? m.text : "Click here to read more") : m.text;
+
+					var item = {time: m.start, text: txt};
+
+					mz.push(item);
+				}
+			}
+
+			//this.player.markers.reset(mz);
+		},
 		
 		addMarkers: function (showAllMarkers) {
+			this.addTimelineMarkers();
+
 			var curDepth = this.toc[this.currentIndex].depth;
 
 			var data = [];

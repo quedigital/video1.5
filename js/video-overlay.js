@@ -7,8 +7,6 @@ define(["jquery.ui"], function () {
 		options: {},
 
 		_create: function () {
-			console.log("ready to go");
-			
 			this.elements = {};
 			this.slots = [undefined, undefined, undefined, undefined, undefined];
 		},

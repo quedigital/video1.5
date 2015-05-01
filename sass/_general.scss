@@ -215,11 +215,15 @@ body {
 		animation-fill-mode: none;
 		-webkit-animation-fill-mode: none;
 		
-		&:hover, &:focus {
+		&:hover, &:hover:focus {
 			text-decoration: none;
 			background-color: #ccc;
 		}
-		
+
+		&:focus {
+			background: none;
+		}
+
 		&:active, &.active {
 			background-color: #C1C0E7;
 			color: rgb(25, 24, 50);
@@ -375,6 +379,20 @@ span.completed {
 
 	.progress {
 		margin-bottom: 0;
+		font-size: 11px;
+		line-height: 20px;
+		color: rgb(129, 129, 134);
+
+		#completed-progress {
+		}
+
+		&:after {
+			content: attr(data-progress);
+			display: block;
+			position: absolute;
+			left: 0;
+			right: 0;
+		}
 	}
 }
 

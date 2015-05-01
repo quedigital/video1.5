@@ -1,5 +1,12 @@
 define(["jquery.ui"], function () {
 
+	// case-insensitive search (found on web)
+	$.extend($.expr[":"], {
+		"containsNC": function (elem, i, match, array) {
+			return (elem.textContent || elem.innerText || "").toLowerCase().indexOf((match[3] || "").toLowerCase()) >= 0;
+		}
+	});
+
 	$.widget("que.TOCTree", {
 
 		options: {},
@@ -45,10 +52,16 @@ define(["jquery.ui"], function () {
 					linkholder = li;
 				}
 
-				li.attr("id", d.id);
+				li.attr("id", d.id).attr("data-index", i);
 
 				var a = $("<a href='#'>");
-				var sp = $("<span>", { html: " " + d.desc });
+				var sp = $("<span>", { class: "desc", html: " " + d.desc });
+
+				switch (d.type) {
+					case "quiz":
+						a.addClass("quiz");
+						break;
+				}
 
 				if (d.short) {
 					var short = $("<span>", { class: "level tree-toggler" });
@@ -102,8 +115,36 @@ define(["jquery.ui"], function () {
 		},
 
 		search: function (term) {
-			this.element.find("li:contains('" + term + "')").show(300);
-			this.element.find("li:not(:contains('" + term + "'))").hide(300);
+			this.element.find("li:containsNC('" + term + "')").show(300);
+			this.element.find("li:not(:containsNC('" + term + "'))").hide(300);
+		},
+
+		markStarted: function (index) {
+			var el = this.element.find("[data-index=" + index + "]");
+			var a = el.find("a");
+			var checked = a.find("i.checked");
+			checked.remove();
+			a.append("<i class='checked fa fa-adjust fa-flip-horizontal fa-lg'></i>");
+		},
+
+		markCompleted: function (index) {
+			var el = this.element.find("[data-index=" + index + "]");
+			var a = el.find("a");
+			var checked = a.find("i.checked");
+			checked.remove();
+			a.append("<i class='checked fa fa-check-circle fa-lg'></i>");
+
+			a.find("span.desc").addClass("completed");
+		},
+
+		setStatus: function (items) {
+			for (var i = 0; i < items.length; i++) {
+				var item = items[i];
+				if (item.completed)
+					this.markCompleted(i);
+				else if (item.started)
+					this.markStarted(i);
+			}
 		}
 	});
 });

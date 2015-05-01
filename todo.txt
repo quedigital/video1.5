@@ -1,8 +1,7 @@
-// TODO: case insensitive search
 // TODO: timeline markers: http://www.sampingchuang.com/videojs-markers
+// TODO: rewind button doesn't work with non-dev video.js (?)
 // TODO: scroll resource markers to keep the current one in the middle
 // TODO: get coach-marks to load from library
-// TODO: indicate completed TOC rows with check mark
 // TODO: clear events from popcorn when loading new video (it wasn't accounting for the length of the newly-loaded video)
 // TODO: search field (searches TOC and transcript? shows results how?)
 // TODO: do something with transcript? (overlay?)
@@ -37,3 +36,7 @@
 // DONE: size sidebar and toc for smaller screen widths
 // DONE: highlight current markers in sidebar toc
 // DONE: back button
+// DONE: case insensitive search
+// DONE: indicate completed TOC rows with check mark
+// DONE: store user data in "Database" object (ready for User ID)
+// DONE: calculate completion %
