@@ -50,7 +50,26 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs-markers"], 
 			this.player.on("play", $.proxy(this.onVideoStarted, this));
 			this.player.on("ended", $.proxy(this.onVideoEnded, this));
 			this.player.on("timeupdate", $.proxy(this.saveCurrentVideoTime, this));
-			
+
+			this.player.markers({
+				markerStyle: {
+					"width": "8px",
+					"background-color": "rgb(218, 197, 93)"
+				},
+				markerTip: {
+					display: true,
+					text: function (marker) {
+						return marker.text;
+					}
+				},
+				markers: [
+					{time: 9.5, text: "this"},
+					{time: 16,  text: "is"},
+					{time: 23.6,text: "so"},
+					{time: 28,  text: "cool"}
+				]
+			});
+
 			this.currentIndex = undefined;
 
 			this.trackID = 1;
@@ -212,23 +231,6 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs-markers"], 
 		},
 
 		addTimelineMarkers: function () {
-			//if (!(this.player.markers instanceof Function)) {
-			//	console.log("destroy");
-				//this.player.markers.destroy();
-			//}
-
-			/*
-			this.player.markers({
-				markerTip: {
-					display: true,
-					text: function (marker) {
-						return marker.text;
-					}
-				},
-				markers: []
-			});
-			*/
-
 			var curDepth = this.toc[this.currentIndex].depth;
 
 			var mz = [];
@@ -245,7 +247,7 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs-markers"], 
 				}
 			}
 
-			//this.player.markers.reset(mz);
+			this.player.markers.reset(mz);
 		},
 		
 		addMarkers: function (showAllMarkers) {

@@ -1,4 +1,3 @@
-// TODO: timeline markers: http://www.sampingchuang.com/videojs-markers
 // TODO: rewind button doesn't work with non-dev video.js (?)
 // TODO: scroll resource markers to keep the current one in the middle
 // TODO: get coach-marks to load from library
@@ -40,3 +39,4 @@
 // DONE: indicate completed TOC rows with check mark
 // DONE: store user data in "Database" object (ready for User ID)
 // DONE: calculate completion %
+// DONE: timeline markers: http://www.sampingchuang.com/videojs-markers

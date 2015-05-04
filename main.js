@@ -11,7 +11,7 @@ requirejs.config({
 		"popcorn": "popcorn-complete.min",
 		"bootstrap-toolkit": "bootstrap-toolkit.min",
 		"videojs": "video.dev",
-		"videojs-markers": "videojs-markers.min"
+		"videojs-markers": "videojs-markers"
         //"coach-marks": "/widgets/js/coach-marks"
 	},
 	
