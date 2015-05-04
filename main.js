@@ -49,10 +49,11 @@ requirejs.config({
 			deps: ["jquery"]
 		},
 		"videojs": {
-			export: "videojs"
+			export: "videojs",
+			deps: ["jquery"]
 		},
 		"videojs-markers": {
-			deps: ["video"]
+			deps: ["videojs", "jquery"]
 		}
 	}
 });

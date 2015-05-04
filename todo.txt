@@ -1,4 +1,3 @@
-// TODO: rewind button doesn't work with non-dev video.js (?)
 // TODO: scroll resource markers to keep the current one in the middle
 // TODO: get coach-marks to load from library
 // TODO: clear events from popcorn when loading new video (it wasn't accounting for the length of the newly-loaded video)
@@ -39,4 +38,5 @@
 // DONE: indicate completed TOC rows with check mark
 // DONE: store user data in "Database" object (ready for User ID)
 // DONE: calculate completion %
-// DONE: timeline markers: http://www.sampingchuang.com/videojs-markers
+// DONE: timeline markers: http://www.sampingchuang.com/videojs-markers [NOTE: modified to support html in popups]
+// TODONT: rewind button doesn't work with non-dev video.js (?) [minification bug in video.js 4.12.5?]

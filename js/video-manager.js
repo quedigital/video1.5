@@ -1,4 +1,4 @@
-define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs-markers"], function (BootstrapDialog, Database) {
+define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-markers"], function (BootstrapDialog, Database) {
 
 	String.prototype.toHHMMSS = function () {
 		var sec_num = parseInt(this, 10);
@@ -44,7 +44,7 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs-markers"], 
 
 			this.pop = Popcorn(el, { frameAnimation: true });
 
-			var backButton = new videojs.BackButton( this.player );
+			var backButton = new videojs.BackButton(this.player);
 			this.player.controlBar.addChild(backButton);
 
 			this.player.on("play", $.proxy(this.onVideoStarted, this));
@@ -59,7 +59,7 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs-markers"], 
 				markerTip: {
 					display: true,
 					text: function (marker) {
-						return marker.text;
+						return "Marker: " + marker.text;
 					}
 				},
 				markers: [
