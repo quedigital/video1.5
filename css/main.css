@@ -9,12 +9,10 @@
 #contents {
   transition: width .5s linear;
   padding: 0; }
-  #contents .well {
-    padding-left: 0;
-    padding-right: 0;
-    padding-top: 0;
-    height: 100%;
-    margin-bottom: 0; }
+  #contents #contents-pane {
+    border-right: 1px solid #ccc; }
+    #contents #contents-pane a {
+      color: #719db7; }
 
 .video-holder {
   height: 100%;
@@ -74,11 +72,7 @@
 
 #sidebar {
   padding: 0;
-  background-color: #eaebff;
   display: none; }
-  #sidebar .well {
-    height: 100%;
-    margin-bottom: 0; }
   #sidebar pre {
     word-wrap: normal;
     margin-top: 1em;
@@ -116,14 +110,12 @@
     padding-bottom: 20px; }
   #sidebar .scroller {
     padding: 5px;
-    /*
-    margin: 5px;
-    background-color: rgb(221, 240, 230);
-    border: 1px solid rgb(162, 211, 161);
-    border-radius: 10px;
-    */ }
-  #sidebar .resource-list li {
-    transition: background-color 1s ease-in-out; }
+    border-left: 1px solid #ccc; }
+  #sidebar .resource-list a {
+    color: #719db7; }
+  #sidebar .resource-list li:hover, #sidebar .resource-list li:hover:focus {
+    text-decoration: none;
+    background-color: #ccc; }
   #sidebar .resource-list li.current {
     background-color: #e7dbda;
     border-radius: 5px; }
@@ -197,7 +189,7 @@
 
 .level {
   display: inline-block;
-  background-color: #A5A4D2;
+  background-color: #719db7;
   color: white;
   font-size: 12px;
   padding: 2px 2px 0 2px;
@@ -212,9 +204,19 @@
 
 #toc-toggler {
   margin: 8px 0 0 8px; }
+  #toc-toggler:focus {
+    outline: none; }
+  #toc-toggler.open {
+    background: white !important;
+    color: #337ab7 !important; }
 
 #resource-toggler {
   margin: 8px 8px 0 0; }
+  #resource-toggler:focus {
+    outline: none; }
+  #resource-toggler.open {
+    background: white !important;
+    color: #337ab7 !important; }
 
 .checked {
   color: orange;
@@ -250,10 +252,10 @@ span.completed {
   width: 100%; }
 
 .quiz {
-  color: #BE7C3A; }
+  color: #569E39 !important; }
 
 .quiz-background {
-  background-color: #be7c3a; }
+  background-color: #569E39; }
 
 #main_iframe {
   position: absolute;
@@ -263,19 +265,13 @@ span.completed {
   height: 100%;
   display: none; }
 
-#md-detector {
-  position: absolute;
-  top: 0;
-  left: 0;
-  color: white;
-  z-index: 100000; }
-
 .course-progress {
   text-align: center;
   margin: 0;
   padding: 12px;
   background-color: #e0e0e0; }
   .course-progress .progress {
+    position: relative;
     margin-bottom: 0;
     font-size: 11px;
     line-height: 20px;

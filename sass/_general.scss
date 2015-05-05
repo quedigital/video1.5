@@ -1,4 +1,7 @@
 $video-background-color: white;
+$blue-color: #719db7;
+$quiz-color: #569E39;
+$button-blue: #337ab7;
 
 html {
 }
@@ -18,15 +21,15 @@ body {
 
 #contents {
 	transition: width .5s linear;
-	
+
 	padding: 0;
-	
-	.well {
-		padding-left: 0;
-		padding-right: 0;
-		padding-top: 0;
-		height: 100%;
-		margin-bottom: 0;
+
+	#contents-pane {
+		border-right: 1px solid #ccc;
+
+		a {
+			color: $blue-color;
+		}
 	}
 }
 
@@ -104,14 +107,8 @@ body {
 
 #sidebar {
 	padding: 0;
-	background-color: #eaebff;
 	display: none;
-	
-	.well {
-		height: 100%;
-		margin-bottom: 0;
-	}
-	
+
 	pre {
 		word-wrap: normal;
 		margin-top: 1em;
@@ -147,6 +144,7 @@ body {
 			top: 27px;
 			left: -30px;
 		}
+
 	}
 
 	.nav-tabs > li.active > a {
@@ -168,17 +166,19 @@ body {
 	
 	.scroller {
 		padding: 5px;
-		/*
-		margin: 5px;
-		background-color: rgb(221, 240, 230);
-		border: 1px solid rgb(162, 211, 161);
-		border-radius: 10px;
-		*/
+		border-left: 1px solid #ccc;
 	}
 
 	.resource-list {
+		a {
+			color: $blue-color;
+		}
+
 		li {
-			transition: background-color 1s ease-in-out;
+			&:hover, &:hover:focus {
+				text-decoration: none;
+				background-color: #ccc;
+			}
 		}
 
 		li.current {
@@ -284,7 +284,7 @@ body {
 
 .level {
     display: inline-block;
-	background-color: #A5A4D2;
+	background-color: $blue-color;
 	color: white;
 	font-size: 12px;
 	padding: 2px 2px 0 2px;
@@ -300,10 +300,28 @@ body {
 
 #toc-toggler {
 	margin: 8px 0 0 8px;
+
+	&:focus {
+		outline: none;
+	}
+
+	&.open {
+		background: white !important;
+		color: $button-blue !important;
+	}
 }
 
 #resource-toggler {
     margin: 8px 8px 0 0;
+
+	&:focus {
+		outline: none;
+	}
+
+	&.open {
+		background: white !important;
+		color: $button-blue !important;
+	}
 }
 
 .checked {
@@ -347,11 +365,11 @@ span.completed {
 }
 
 .quiz {
-	color: #BE7C3A;
+	color: $quiz-color !important;
 }
 
 .quiz-background {
-	background-color: #be7c3a;
+	background-color: $quiz-color;
 }
 
 #main_iframe {
@@ -363,14 +381,6 @@ span.completed {
 	display: none;
 }
 
-#md-detector {
-	position: absolute;
-	top: 0;
-	left: 0;
-	color: white;
-	z-index: 100000;
-}
-
 .course-progress {
 	text-align: center;
 	margin: 0;
@@ -378,6 +388,7 @@ span.completed {
 	background-color: #e0e0e0;
 
 	.progress {
+		position: relative;
 		margin-bottom: 0;
 		font-size: 11px;
 		line-height: 20px;

@@ -1,3 +1,6 @@
+// TODO: resources pane is too tall
+// TODO: enter triggers search
+// TODO: align video to top (based on size of actual video, using Javascript)
 // TODO: scroll resource markers to keep the current one in the middle
 // TODO: get coach-marks to load from library
 // TODO: clear events from popcorn when loading new video (it wasn't accounting for the length of the newly-loaded video)
@@ -40,3 +43,5 @@
 // DONE: calculate completion %
 // DONE: timeline markers: http://www.sampingchuang.com/videojs-markers [NOTE: modified to support html in popups]
 // TODONT: rewind button doesn't work with non-dev video.js (?) [minification bug in video.js 4.12.5?]
+// DONE: collapse button has something wrong with it (not entirely clickable)
+// DONE: invert menu buttons when "open"

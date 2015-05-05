@@ -163,6 +163,7 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 		resizePanes(!contentsVisible, resourcesVisible);
 
         $("#contents .scroller").toggle("slide");
+		$("#toc-toggler").toggleClass("open");
 
 		onResize();
 	}
@@ -174,6 +175,7 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 	    resizePanes(contentsVisible, !resourcesVisible);
 
         $("#sidebar").toggle("slide", { direction: "right", done: onResize });
+	    $("#resource-toggler").toggleClass("open");
 
         //onResize();
     }
@@ -221,6 +223,7 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 	$("#collapse-button").click(expandOrCollapse);
 	$(".search-button").click(onSearch);
 	$("#clear-search-button").click(onClearSearch);
+	$("#account-button").click(function () { window.open("//memberservices.informit.com/my_account/index.aspx"); });
 
 	$("body").tooltip();
 
