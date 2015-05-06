@@ -142,6 +142,23 @@ console.log("platform :" + os.platform());</pre>';
 		{ depth: "1,2", start: 61, end: 66, id: "sandbox1", text: "Click here to try it out this exact code in a live sandbox.", type: "sandbox", html: sandbox1 },
 		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
 
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+		{ depth: "1,2", start: 65, end: 70, id: "sandbox2", text: "Click here to try out this other code in a live sandbox.", type: "sandbox", html: sandbox2 },
+
 //		{ depth: "1,3", start: 11, end: 16, type: "epub", src: "learningnodejs", page: "ch05.html#ch05_ch05", title: "Learning Node.js", cover: "9780133377989.jpg", text: "Click here to read more about modules." },
 
 //		{ depth: "1,4", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch03.html#ch03_ch03", title: "Learning Node.js", cover: "9780133377989.jpg" },
@@ -151,12 +168,5 @@ console.log("platform :" + os.platform());</pre>';
 //		{ depth: "1,6", start: 10, end: 15, type: "epub", src: "learningnodejs", page: "ch06.html#ch06_ch06", title: "Learning Node.js", cover: "9780133377989.jpg" }
 	];
 
-	var temp_markers = [
-		{ depth: "0", short: "<i class='fa fa-home'></i>", desc: "Marker A" },
-		{ depth: "0,0", short: "<i class='fa fa-home'></i>", desc: "Marker 1" },
-		{ depth: "0,1", short: "<i class='fa fa-home'></i>", desc: "Marker 2" },
-		{ depth: "0,2", short: "<i class='fa fa-home'></i>", desc: "Marker 3" }
-		];
-
-	return { toc: toc, markers: markers, temp_markers: temp_markers };
+	return { toc: toc, markers: markers };
 });

@@ -65,7 +65,7 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 
 	$(".toc").TOCTree({ data: metadata.toc });
 
-	$(".resource-list").TOCTree();//{ data: metadata.temp_markers });
+	$(".resource-list").TOCTree();
 	
 	var v = $("#video .overlay").VideoOverlay();
 
@@ -103,17 +103,10 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 	
 	function onResize () {
 		var wh = $(window).outerHeight();
-		var vh = $("#video").outerHeight();
-		
+
 		$("#contents").outerHeight(wh - 50);
 		$("#video").outerHeight(wh - 50);
 		$("#sidebar").outerHeight(wh - 50);
-
-        $.each($("#sidebar .scroller"), function (index, el) {
-            var t = $(el).offset().top;
-            // NOTE: this isn't sizing quite right:
-            $(el).outerHeight(wh - t - 5);
-        });
 
 		// kludge to subtract main menu bar and course progress
 		$("#contents .scroller").height(wh - 50 - 50);
@@ -222,6 +215,7 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 	$(".resource-list").on("playvideo", onClickMarker);
 	$("#collapse-button").click(expandOrCollapse);
 	$(".search-button").click(onSearch);
+	$("#query").on("input", onSearch);
 	$("#clear-search-button").click(onClearSearch);
 	$("#account-button").click(function () { window.open("//memberservices.informit.com/my_account/index.aspx"); });
 

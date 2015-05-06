@@ -109,6 +109,7 @@
     border-radius: 10px 10px 0 0;
     padding-bottom: 20px; }
   #sidebar .scroller {
+    height: 100%;
     padding: 5px;
     border-left: 1px solid #ccc; }
   #sidebar .resource-list a {
@@ -291,5 +292,19 @@ span.completed {
 .vjs-back-button:before {
   font-family: FontAwesome !important;
   content: "\f0e2"; }
+
+#main_video .vjs-tip {
+  font-size: 14px;
+  line-height: 1.3; }
+  #main_video .vjs-tip .vjs-tip-inner {
+    padding: 1em; }
+
+.blocky {
+  color: #959595;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 1em; }
 
 /*# sourceMappingURL=main.css.map */

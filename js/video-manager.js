@@ -59,15 +59,10 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 				markerTip: {
 					display: true,
 					text: function (marker) {
+						console.log(marker.class);
 						return "Marker: " + marker.text;
 					}
-				},
-				markers: [
-					{time: 9.5, text: "this"},
-					{time: 16,  text: "is"},
-					{time: 23.6,text: "so"},
-					{time: 28,  text: "cool"}
-				]
+				}
 			});
 
 			this.currentIndex = undefined;

@@ -92,6 +92,9 @@ define(["jquery.ui"], function () {
 
 				last_depth = depth[0];
 			}
+
+			var p = $("<p>", { id: "query-summary", class: "blocky", text: "" });
+			this.element.append(p);
 		},
 		
 		launchVideo: function (index) {
@@ -115,8 +118,21 @@ define(["jquery.ui"], function () {
 		},
 
 		search: function (term) {
-			this.element.find("li:containsNC('" + term + "')").show(300);
+			var toShow = this.element.find("li:containsNC('" + term + "')");
+
+			toShow.show(300);
+
 			this.element.find("li:not(:containsNC('" + term + "'))").hide(300);
+
+			if (term != "") {
+				if (toShow.length) {
+					$("#query-summary").text("Count: " + toShow.length);
+				} else {
+					$("#query-summary").text("No matching titles. Try a different search?");
+				}
+			} else {
+				$("#query-summary").text("");
+			}
 		},
 
 		markStarted: function (index) {
