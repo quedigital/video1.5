@@ -17,6 +17,13 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		return time;
 	};
 
+	function URLWithoutHash (url) {
+		var n = url.lastIndexOf("#");
+		if (n != -1) return url.substr(0, n);
+		else return url;
+	}
+
+
 	videojs.BackButton = videojs.Button.extend({});
 
 	videojs.BackButton.prototype.buttonText = 'Back 10';
@@ -36,6 +43,7 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.el = el;
 			this.markers = markers;
 			this.player = player;
+			this.iFrameReady = false;
 
 			Database.initialize(toc);
 			$(".toc").TOCTree("setStatus", Database.getItems());
@@ -68,6 +76,10 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.currentIndex = undefined;
 
 			this.trackID = 1;
+		},
+
+		getCurrentIndex: function () {
+			return this.currentIndex;
 		},
 
 		saveCurrentVideoIndex: function () {
@@ -106,6 +118,14 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		},
 		
 		playFromTOC: function (index, options) {
+			if (options.skipToNextSource) {
+				while (index < this.toc.length && URLWithoutHash(this.toc[index].src) == options.previousSource) {
+					index++;
+				}
+
+				if (index >= this.toc.length) return;
+			}
+
 			// if this is iframe content, open it now; otherwise, it's video
 			if (this.toc[index].src) {
 				this.playExtraFromTOC(index, options);
@@ -153,10 +173,13 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		},
 
 		playExtraFromTOC: function (index, options) {
-			console.log("open " + this.toc[index].src);
-			$("#main_iframe").attr("src", this.toc[index].src).show();
-			$("#main_video").hide();
-			this.player.pause();
+			this.iFrameReady = false;
+
+			if (options.doNotLoad != true) {
+				$("#main_iframe").attr("src", this.toc[index].src).show();
+				$("#main_video").hide();
+				this.player.pause();
+			}
 
 			this.currentIndex = index;
 
@@ -183,31 +206,45 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			return undefined;
 		},
 		
-		advanceTOC: function () {
+		advanceTOC: function (options) {
 			if (this.currentIndex < this.toc.length - 1) {
-				this.playFromTOC(this.currentIndex + 1);
+				this.playFromTOC(this.currentIndex + 1, options);
 			}
 		},
 
 		onVideoStarted: function () {
-			Database.setItemProperty(this.currentIndex, "started", true);
-			var completed = Database.getItemProperty(this.currentIndex, "completed");
-			if (!completed)
-				this.markItemStarted(this.currentIndex);
+			this.markItemStarted(this.currentIndex);
 		},
 
 		onVideoEnded: function () {
-			Database.setItemProperty(this.currentIndex, "completed", true);
 			this.markItemCompleted(this.currentIndex);
 
 			this.advanceTOC();
 		},
 
+		onPageScrolledToEnd: function () {
+			this.markItemCompleted(this.currentIndex);
+
+			var previousSrc = URLWithoutHash(this.toc[this.currentIndex].src);
+
+			//this.advanceTOC( { previousSource: previousSrc, skipToNextSource: true } );
+			this.advanceTOC( { previousSource: previousSrc, skipToNextSource: true, doNotLoad: true } );
+		},
+
 		markItemStarted: function (index) {
-			$(".toc").TOCTree("markStarted", index);
+			var completed = Database.getItemProperty(this.currentIndex, "completed");
+			if (!completed) {
+				Database.setItemProperty(this.currentIndex, "started", true);
+				$(".toc").TOCTree("markStarted", index);
+			}
+		},
+
+		markCurrentItemStarted: function () {
+			this.markItemStarted(this.currentIndex);
 		},
 
 		markItemCompleted: function (index) {
+			Database.setItemProperty(this.currentIndex, "completed", true);
 			$(".toc").TOCTree("markCompleted", index);
 
 			this.updateProgress();
@@ -344,7 +381,9 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 				}
 			}
 
-			$(".resource-list").TOCTree("option", "data", data);
+			if (data.length) {
+				$(".resource-list").TOCTree("option", "data", data);
+			}
 		},
 		
 		addTriggersForThisVideo: function () {
@@ -515,6 +554,20 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 
 		isShowingAll: function () {
 			return this.pop.SHOWING_ALL;
+		},
+
+		getNextSection: function () {
+			// return the title of the next entry with a different src (ie, a different section)
+			var curSrc = URLWithoutHash(this.toc[this.currentIndex].src);
+
+			for (var i = this.currentIndex + 1; i < this.toc.length; i++) {
+				var nextSrc = URLWithoutHash(this.toc[i].src);
+				if (nextSrc != curSrc) {
+					return { index: i, title: this.toc[i].desc, src: nextSrc };
+				}
+			}
+
+			return null;
 		}
 			
 	};

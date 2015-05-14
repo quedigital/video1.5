@@ -20,6 +20,96 @@ define(["jquery.ui"], function () {
 
 			this.element.empty();
 
+			if (this.options.type == "habitat")
+				this.refreshFromHabitatData();
+			else
+				this.refreshFromMetadata();
+
+			var p = $("<p>", { id: "query-summary", class: "blocky", text: "" });
+			this.element.append(p);
+		},
+
+		addNodes: function (params, ol, dest, depth) {
+			for (var i = 0; i < ol.children().length; i++) {
+				var d = ol.children().eq(i);
+
+				var new_depth = depth.slice();
+				new_depth.push(i + 1);
+
+				this.addParentNode(params, d, dest, new_depth);
+			}
+		},
+
+		addParentNode: function (params, d, dest, depth) {
+			var li, linkholder;
+
+			li = $("<li>");
+			dest.append(li);
+
+			if (depth.length == 1) {
+				var lbl = $("<label>", {class: "tree-toggler nav-header"});
+				li.append(lbl);
+				linkholder = lbl;
+			} else {
+				var lbl = $("<label>", { class: "" });
+				li.append(lbl);
+				linkholder = lbl;
+			}
+
+			var ul = $("<ul>", { class: "nav nav-list tree" });
+			li.append(ul);
+
+			// TODO: is this defined in the metadata version?
+			var id = undefined;
+
+			li.attr("id", id).attr("data-index", params.counter);
+
+			var a = $("<a href='#'>");
+
+			var entry_text = d.find("a").eq(0).text();
+			var sp = $("<span>", { class: "desc", html: " " + entry_text });
+
+			var short = $("<span>", { class: "level tree-toggler" });
+
+			var short_label;
+			if (depth.length <= 2) {
+				short_label = depth.join(".");
+			} else {
+				short_label = depth[depth.length - 1];
+				short.addClass("invisible");
+			}
+
+			short.html(short_label);
+
+			a.append(short);
+
+			a.append(sp);
+
+			a.appendTo(linkholder);
+
+			a.click($.proxy(this.launchVideo, this, params.counter));
+
+			short.click(function (event) {
+				event.preventDefault();
+				event.stopPropagation();
+				$(this).parents("li").eq(0).children('ul.tree').toggle(300);
+			});
+
+
+			params.counter++;
+
+			var ol = d.children("ol");
+
+			this.addNodes(params, ol, ul, depth);
+		},
+
+		refreshFromHabitatData: function () {
+			var ol = $(this.options.data).find("nav > ol");
+
+			this.addNodes( { counter: 0 }, ol, this.element, []);
+		},
+
+		refreshFromMetadata: function () {
 			var depths = [];
 			var last_depth = undefined;
 			var current_ul;
@@ -92,9 +182,6 @@ define(["jquery.ui"], function () {
 
 				last_depth = depth[0];
 			}
-
-			var p = $("<p>", { id: "query-summary", class: "blocky", text: "" });
-			this.element.append(p);
 		},
 		
 		launchVideo: function (index) {

@@ -59,20 +59,13 @@ requirejs.config({
 });
 
 //require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "coach-marks"], function (metadata, VideoManager) {
-require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "bootstrap-toolkit"], function (metadata, VideoManager) {
+require(["video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "bootstrap-toolkit"], function (VideoManager) {
 
 	var coachMarksShown = false;
+	var projectManifest;
 
-	$(".toc").TOCTree({ data: metadata.toc });
-
-	$(".resource-list").TOCTree();
-	
 	var v = $("#video .overlay").VideoOverlay();
 
-	$('.level.tree-toggler').click(function () {
-		$(this).parents("li").children('ul.tree').toggle(300);
-	});
-	
 	$(window).resize(onResize);
 		
 	$(".trackalert").addClass("hidden");
@@ -82,10 +75,103 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 		initialize();
 	}, false);
 
-	var iframe = $("#main_iframe");
-	iframe[0].addEventListener('load', function () {
+	$("#main_iframe").on("load", onIFrameLoaded);
+
+	function onIFrameScrolled () {
+		if (!VideoManager.iFrameReady) return;
+
+		VideoManager.markCurrentItemStarted();
+
+		// check to see if it's time to advance
+		var iframeWindow = $($("#main_iframe")[0].contentWindow);
+		var iframeDocument = $($("#main_iframe")[0].contentDocument);
+
+		var h_win = iframeWindow.scrollTop() + iframeWindow.height();
+		var h_doc = iframeDocument.height();
+
+		if (h_win > h_doc - 50) {
+			console.log("auto scroll");
+			//VideoManager.onPageScrolledToEnd();
+			//var iframe = $('<iframe id="next_iframe" frameborder="0" src="title_urpc/s9ml/imported_files01/ch01a.xhtml"></iframe>');
+			//$(".text-holder").append(iframe);
+		}
+	}
+
+	function onScrollContent () {
+		if (!VideoManager.iFrameReady) return;
+
+		var h_container = $("#video").scrollTop() + $("#video").height();
+		var h_scroller = $("#video .text-holder").height();
+
+		if (h_container > h_scroller - 50) {
+			console.log("auto scroll");
+
+			var obj = VideoManager.getNextSection();
+
+			var iframe = $('<iframe id="next_iframe" frameborder="0"></iframe>');
+			iframe.attr("src", obj.src);
+			$(".text-holder").append(iframe);
+
+			VideoManager.iFrameReady = false;
+
+			iframe.on("load", onIFrameLoaded);
+
+			VideoManager.onPageScrolledToEnd();
+		}
+	}
+
+	function onIFrameLoaded (event) {
 		initialize();
-	}, false);
+
+		var path = getAbsolutePath();
+
+		var iframe = $(event.target);
+
+		// add our own stylesheet for additional styles
+		var $head = iframe.contents().find("head");
+		$head.append($("<link/>",
+			{ rel: "stylesheet", href: path + "/css/main.css", type: "text/css" }));
+
+		var obj = VideoManager.getNextSection();
+
+		if (obj) {
+			// add a next button
+			/*
+			var a = $('<a href="" class="button button-a"><h4>Next Up </h4>' + obj.title + '</a>');
+			a.click(function (event) {
+				event.preventDefault();
+				onPlayVideo(a, obj.index);
+			});
+
+			iframe.contents().find("body").append(a);
+			*/
+
+			var h = iframe.contents().find("html").outerHeight();
+
+			// turn off scrolling on the iframe's content
+			iframe.contents().find("html").css("overflow", "hidden");
+
+			iframe.height(h);
+
+			// bit of a kludge to get the scroll thumb to show up again on Mac Chrome
+			/*
+			$("#video").css("overflow", "visible");
+			setTimeout(function () {
+				$("#video").css("overflow", "scroll");
+			}, 0);
+			*/
+		}
+
+		//$("#main_iframe")[0].contentWindow.addEventListener("scroll", onIFrameScrolled);
+
+		VideoManager.iFrameReady = true;
+	}
+
+	function getAbsolutePath () {
+		var loc = window.location;
+		var pathName = loc.pathname.substring(0, loc.pathname.lastIndexOf('/'));
+		return loc.origin + pathName;
+	}
 
 	function initialize () {
 		onResize();
@@ -193,7 +279,9 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 			$(".toc > li > ul").hide(300);
 		} else {
 			$("#collapse-button i").removeClass("fa-caret-down").addClass("fa-caret-up");
-			$(".toc > li > ul").show(300);
+			//$(".toc > li > ul").show(300);
+			// expand all
+			$(".toc li ul").show(300);
 		}
 	}
 
@@ -206,7 +294,69 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 		$("#query").val("");
 		$(".toc").TOCTree("search", "");
 	}
-		
+
+	function convertHabitatTOCtoMetadata (data) {
+		var links = $(data).find("a");
+
+		var metadata = links.map(function (index, item) {
+			var a = $(item);
+			return {
+				desc: a.text(),
+				src: projectManifest.folder + "/" + a.attr("href")
+			};
+		});
+
+		return metadata;
+	}
+
+	function onLoadedTOC (metadata) {
+		$(".toc").TOCTree({ data: metadata.toc });
+
+		$(".resource-list").TOCTree();
+
+		VideoManager.initialize(metadata.toc, "#video video", videojs("main_video"), metadata.markers);
+
+		//VideoManager.loadFirstVideo();
+		VideoManager.loadMostRecentVideo();
+	}
+
+	function onHabitatTOCLoaded (data) {
+		$(".toc").TOCTree({ type: "habitat", data: data });
+
+		var metadata = convertHabitatTOCtoMetadata(data);
+
+		VideoManager.initialize(metadata, "#video video", videojs("main_video"), []);
+
+		initialize();
+
+		VideoManager.loadMostRecentVideo();
+	}
+
+	function loadContentPerManifest () {
+		switch (projectManifest.type) {
+			case "metadata":
+				require([projectManifest.folder + "/nodejs-toc.js"], onLoadedTOC);
+				break;
+			case "habitat":
+				$.get(projectManifest.folder + "/toc.xhtml", onHabitatTOCLoaded);
+				break;
+		}
+	}
+
+	function loadManifest () {
+		require(["manifest.js"], function (manifest) {
+			setManifest(manifest);
+		});
+	}
+
+	function setManifest (manifest) {
+		projectManifest = manifest;
+
+		loadContentPerManifest();
+	}
+
+	$("#video").scroll(onScrollContent);
+
 	$(".show-all-markers").click(onShowAllMarkers);
 	$("#toc-toggler").click(onToggleTOC);
     $("#resource-toggler").click(onToggleResources);
@@ -223,10 +373,7 @@ require(["nodejs-toc", "video-manager", "videojs", "toc-tree", "popcorn", "popco
 
 	videojs("main_video", { "controls": true, "autoplay": false, "preload": "auto" });
 
-	VideoManager.initialize(metadata.toc, "#video video", videojs("main_video"), metadata.markers);
-	
-	//VideoManager.loadFirstVideo();
-	VideoManager.loadMostRecentVideo();
-
 	resizePanes(true, false);
+
+	loadManifest();
 });

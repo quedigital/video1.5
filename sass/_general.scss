@@ -27,6 +27,10 @@ body {
 	#contents-pane {
 		border-right: 1px solid #ccc;
 
+		label:not(.nav-header) {
+			font-weight: 400;
+		}
+
 		a {
 			color: $blue-color;
 		}
@@ -38,6 +42,20 @@ body {
 	top: 50%;
 	transform: translateY(-50%);
 	position: relative;
+
+	/* ********* */
+	display: none;
+}
+
+.text-holder {
+	/*
+	height: auto;
+	overflow: hidden;
+	*/
+
+	iframe {
+		width: 100%;
+	}
 }
 
 #video {
@@ -46,7 +64,9 @@ body {
 	transition: width .5s linear;
 	
 	background-color: $video-background-color;
-	
+
+	overflow: scroll;
+
 	.overlay {
 		position: absolute;
 		top: 0;
@@ -374,11 +394,14 @@ span.completed {
 }
 
 #main_iframe {
+	/*
 	position: absolute;
 	top: 0;
 	left: 0;
-	width: 100%;
 	height: 100%;
+	*/
+	width: 100%;
+	height: auto;
 	display: none;
 }
 
@@ -441,4 +464,23 @@ span.completed {
 	text-transform: uppercase;
 	letter-spacing: 1px;
 	margin-top: 1em;
+}
+
+// HABITAT includes:
+
+.button-a {
+	width: 100%;
+	display: block;
+	color: #007db6;
+	text-align: left;
+	background: #e5f2f7;
+	text-decoration: none;
+	text-transform: none;
+	padding: 20px;
+	border-radius: 3px;
+	border-bottom: 3px solid #007db6;
+	background-position: right 13.3333px top 50%;
+	background-size: auto 1.5em;
+	background-repeat: no-repeat;
+	background-image: url(../images/icon-arrow-black.svg);
 }
