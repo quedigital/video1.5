@@ -344,7 +344,7 @@ require(["video-manager", "bootstrap-dialog", "videojs", "toc-tree", "popcorn", 
 			var a = $(item);
 			return {
 				desc: a.text(),
-				src: projectManifest.folder + "/" + a.attr("href")
+				src: projectManifest.folder + "/OPS/" + a.attr("href")
 			};
 		});
 
@@ -380,7 +380,7 @@ require(["video-manager", "bootstrap-dialog", "videojs", "toc-tree", "popcorn", 
 				require([projectManifest.folder + "/nodejs-toc.js"], onLoadedTOC);
 				break;
 			case "habitat":
-				$.get(projectManifest.folder + "/toc.xhtml", onHabitatTOCLoaded);
+				$.get(projectManifest.folder + "/OPS/toc.xhtml", onHabitatTOCLoaded);
 				break;
 		}
 	}

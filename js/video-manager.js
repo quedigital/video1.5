@@ -108,6 +108,10 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		loadFirstVideo: function () {
 			var index = this.getFirstVideoFromTOC();
 
+			if (index == undefined) {
+				index = 0;
+			}
+
 			this.playFromTOC(index, { pause: true });
 		},
 
