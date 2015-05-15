@@ -1,8 +1,7 @@
-// TODO: (Habitat) auto-advance
-// TODO: (Habitat) click Next or auto-advance "completes" a section
-// TODO: (Habitat) open zoomed images in modal pop-up
-// TODO: debounce search so it's more responsive (maybe)
+// TODO: (Habitat) make TOC match video's DOM structure more exactly
 // TODO: load from minimum index.html (via AWS folder)
+// TODO: refactor out some of the iframe code in main.js
+// TODO: debounce search so it's more responsive (maybe)
 // TODO: workflow for spreadsheet to json (node.js?)
 // TODO: get coach-marks to load from library
 // TODO: clear events from popcorn when loading new video (it wasn't accounting for the length of the newly-loaded video)
@@ -57,3 +56,7 @@
 // DONE: (Habitat) reload from last open section
 // DONE: manifest file with title properties
 // DONE: collapsible section headers
+// DONE: (Habitat) auto-advance
+// DONE: (Habitat) click Next or auto-advance "completes" a section
+// DONE: (Habitat) highlight and scroll to currently visible section in TOC
+// DONE: (Habitat) open zoomed images in modal pop-up

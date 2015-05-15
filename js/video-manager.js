@@ -176,7 +176,10 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.iFrameReady = false;
 
 			if (options.doNotLoad != true) {
-				$("#main_iframe").attr("src", this.toc[index].src).show();
+				var sel = $(".text-holder *").not("#main_iframe");
+				sel.remove();
+//				$("iframe[id != 'main_iframe']").remove();
+				$("#main_iframe").attr( { src: this.toc[index].src, "data-index": index } ).show();
 				$("#main_video").hide();
 				this.player.pause();
 			}

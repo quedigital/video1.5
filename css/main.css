@@ -142,6 +142,8 @@
 .nav-list {
   padding-left: 35px;
   position: relative; }
+  .nav-list li.active {
+    background-color: #f0f0f7; }
   .nav-list .divider {
     box-sizing: content-box;
     height: 1px;
@@ -149,6 +151,9 @@
     overflow: hidden;
     background-color: #e5e5e5;
     border-bottom: 1px solid #fff; }
+  .nav-list > li > label > a:active, .nav-list > li > label > a.active {
+    background-color: #C1C0E7;
+    color: #191832; }
   .nav-list > li > a {
     padding: 3px 0;
     margin-left: 0;

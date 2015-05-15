@@ -9,5 +9,11 @@ define([], function () {
 		type: "habitat"
 	};
 
+	var unleashed_example = {
+		folder: "title_unleashed",
+		type: "habitat"
+	};
+
 	return habitat_example;
+//	return unleashed_example;
 });

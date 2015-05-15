@@ -218,6 +218,10 @@ body {
 .nav-list {
 	padding-left: 35px;
 	position: relative;
+
+	li.active {
+		background-color: rgb(240, 240, 247);
+	}
 	
 	.divider {
 		box-sizing: content-box;
@@ -227,7 +231,14 @@ body {
 		background-color: #e5e5e5;
 		border-bottom: 1px solid #fff;
 	}
-	
+
+	& > li > label > a {
+		&:active, &.active {
+			background-color: #C1C0E7;
+			color: rgb(25, 24, 50);
+		}
+	}
+
 	& > li > a {
 		padding: 3px 0;
 		margin-left: 0;

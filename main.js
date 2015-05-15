@@ -4,6 +4,7 @@ requirejs.config({
 		"jquery": "jquery-2.1.3.min",
 		"jquery.ui": "jquery-ui.min",
 		"jquery.json": "jquery.json.min",
+		"jquery.onscreen": "jquery.onscreen.min",
 		"bootstrap": "bootstrap",
 		"bootstrap-notify": "bootstrap-notify.min",
 		"bootstrap-dialog": "bootstrap-dialog.min",
@@ -23,6 +24,10 @@ requirejs.config({
 			export: "$"
 		},
 		"jquery.json": {
+			export: "$",
+			deps: ['jquery']
+		},
+		"jquery.onscreen": {
 			export: "$",
 			deps: ['jquery']
 		},
@@ -59,7 +64,7 @@ requirejs.config({
 });
 
 //require(["nodejs-toc", "video-manager", "video", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "coach-marks"], function (metadata, VideoManager) {
-require(["video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "bootstrap-toolkit"], function (VideoManager) {
+require(["video-manager", "bootstrap-dialog", "videojs", "toc-tree", "popcorn", "popcorn.timebase", "video-overlay", "bootstrap", "bootstrap-toolkit", "jquery.onscreen"], function (VideoManager, BootstrapDialog) {
 
 	var coachMarksShown = false;
 	var projectManifest;
@@ -77,39 +82,42 @@ require(["video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", 
 
 	$("#main_iframe").on("load", onIFrameLoaded);
 
-	function onIFrameScrolled () {
+	function onScrollContent () {
 		if (!VideoManager.iFrameReady) return;
 
 		VideoManager.markCurrentItemStarted();
 
-		// check to see if it's time to advance
-		var iframeWindow = $($("#main_iframe")[0].contentWindow);
-		var iframeDocument = $($("#main_iframe")[0].contentDocument);
-
-		var h_win = iframeWindow.scrollTop() + iframeWindow.height();
-		var h_doc = iframeDocument.height();
-
-		if (h_win > h_doc - 50) {
-			console.log("auto scroll");
-			//VideoManager.onPageScrolledToEnd();
-			//var iframe = $('<iframe id="next_iframe" frameborder="0" src="title_urpc/s9ml/imported_files01/ch01a.xhtml"></iframe>');
-			//$(".text-holder").append(iframe);
+		// keep the toc for the currently visible iframe section in view
+		var onscreen = $("iframe:onScreen");
+		if (onscreen.length) {
+			var index = onscreen.last().attr("data-index");
+			$(".toc li").removeClass("active");
+			$(".toc li[data-index=" + index + "]").addClass("active");
+			var entry = $(".toc li.active");
+			var scroller = $("#contents-pane .scroller");
+			var t = scroller.scrollTop();
+			var h = scroller.height();
+			var p = entry.offset().top;
+			var desired_top = (h * .5);// - entry.height();
+			var adj = p - desired_top;
+			var dest = (t + adj);
+			var currTarget = scroller.attr("data-scrolltarget");
+			var diff = (currTarget - dest);
+			if (currTarget == undefined || Math.abs(diff) > 20) {
+				scroller.attr("data-scrolltarget", dest);
+				scroller.stop().animate({ scrollTop: dest }, 1000);
+			}
 		}
-	}
 
-	function onScrollContent () {
-		if (!VideoManager.iFrameReady) return;
-
+		// check for auto-advance
 		var h_container = $("#video").scrollTop() + $("#video").height();
 		var h_scroller = $("#video .text-holder").height();
 
 		if (h_container > h_scroller - 50) {
-			console.log("auto scroll");
-
 			var obj = VideoManager.getNextSection();
 
 			var iframe = $('<iframe id="next_iframe" frameborder="0"></iframe>');
-			iframe.attr("src", obj.src);
+			iframe.attr( { "src": obj.src, "data-index": obj.index });
 			$(".text-holder").append(iframe);
 
 			VideoManager.iFrameReady = false;
@@ -134,7 +142,43 @@ require(["video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", 
 
 		var obj = VideoManager.getNextSection();
 
+		function URLWithoutPage (url) {
+			var n = url.lastIndexOf("/");
+			if (n != -1) return url.substr(0, n);
+			else return url;
+		}
+
 		if (obj) {
+			// find image links within figures
+
+			var figs = iframe.contents().find("figure a img");
+			figs.each(function (index, item) {
+				var captionTitle = $(item).parents("figure").find(".caption-title");
+				var title = "Image";
+				if (captionTitle.length) {
+					title = captionTitle.text();
+				}
+
+				var a = $(item).parent("a");
+				var fullpath = iframe[0].contentWindow.location.href;
+				var path = URLWithoutPage(fullpath);
+
+				a.click(function (event) {
+					event.preventDefault();
+
+					var contents = '<iframe src="' + path + "/" + a.attr("href") + '" width="100%" height="__window height__" frameborder="0"></frame>';
+
+					var wh = $(window).outerHeight();
+					contents = contents.replace("__window height__", (wh * .75));
+
+					BootstrapDialog.show({
+						title: title,
+						message: contents,
+						size: BootstrapDialog.SIZE_WIDE
+					});
+				});
+			});
+
 			// add a next button
 			/*
 			var a = $('<a href="" class="button button-a"><h4>Next Up </h4>' + obj.title + '</a>');
@@ -153,7 +197,7 @@ require(["video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", 
 
 			iframe.height(h);
 
-			// bit of a kludge to get the scroll thumb to show up again on Mac Chrome
+			// kludge to get the scroll thumb to show up again on Mac Chrome
 			/*
 			$("#video").css("overflow", "visible");
 			setTimeout(function () {
@@ -161,8 +205,6 @@ require(["video-manager", "videojs", "toc-tree", "popcorn", "popcorn.timebase", 
 			}, 0);
 			*/
 		}
-
-		//$("#main_iframe")[0].contentWindow.addEventListener("scroll", onIFrameScrolled);
 
 		VideoManager.iFrameReady = true;
 	}
