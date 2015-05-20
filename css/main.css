@@ -14,7 +14,12 @@
     #contents #contents-pane label:not(.nav-header) {
       font-weight: 400; }
     #contents #contents-pane a {
-      color: #719db7; }
+      color: #719db7;
+      display: block; }
+      #contents #contents-pane a span.desc {
+        padding-left: 5px; }
+    #contents #contents-pane label a.active span {
+      color: black; }
 
 .video-holder {
   height: 100%;
@@ -175,7 +180,7 @@
 
 .nav-header {
   display: block;
-  padding: 3px 15px;
+  padding: 3px 8px;
   font-size: 11px;
   font-weight: bold;
   line-height: 20px;

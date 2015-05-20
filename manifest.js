@@ -1,19 +1,23 @@
 define([], function () {
 	var video_example = {
 		folder: "title_nodejs",
-		type: "metadata"
+		type: "metadata",
+		scrolling: false
 	};
 
 	var habitat_example = {
 		folder: "title_urpc",
-		type: "habitat"
+		type: "habitat",
+		scrolling: true
 	};
 
 	var unleashed_example = {
 		folder: "title_unleashed",
-		type: "habitat"
+		type: "habitat",
+		scrolling: true
 	};
 
 	return habitat_example;
 //	return unleashed_example;
+//	return video_example;
 });

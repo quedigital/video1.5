@@ -46,18 +46,16 @@ define(["jquery.ui"], function () {
 			li = $("<li>");
 			dest.append(li);
 
-			if (depth.length == 1) {
+			if (d.find("ol").length) {
 				var lbl = $("<label>", {class: "tree-toggler nav-header"});
 				li.append(lbl);
 				linkholder = lbl;
-			} else {
-				var lbl = $("<label>", { class: "" });
-				li.append(lbl);
-				linkholder = lbl;
-			}
 
-			var ul = $("<ul>", { class: "nav nav-list tree" });
-			li.append(ul);
+				var ul = $("<ul>", { class: "nav nav-list tree" });
+				li.append(ul);
+			} else {
+				linkholder = li;
+			}
 
 			// TODO: is this defined in the metadata version?
 			var id = undefined;
@@ -196,6 +194,7 @@ define(["jquery.ui"], function () {
 				case "data":
 					this.options["data"] = value;
 					this.refresh();
+					break;
 				default:
 					//this.options[ key ] = value;
 					break;
@@ -232,7 +231,7 @@ define(["jquery.ui"], function () {
 
 		markCompleted: function (index) {
 			var el = this.element.find("[data-index=" + index + "]");
-			var a = el.find("a");
+			var a = el.find("> label a, > a");
 			var checked = a.find("i.checked");
 			checked.remove();
 			a.append("<i class='checked fa fa-check-circle fa-lg'></i>");

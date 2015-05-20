@@ -1,4 +1,4 @@
-define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-markers"], function (BootstrapDialog, Database) {
+define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-markers", "jquery.onscreen"], function (BootstrapDialog, Database) {
 
 	String.prototype.toHHMMSS = function () {
 		var sec_num = parseInt(this, 10);
@@ -23,7 +23,6 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		else return url;
 	}
 
-
 	videojs.BackButton = videojs.Button.extend({});
 
 	videojs.BackButton.prototype.buttonText = 'Back 10';
@@ -43,7 +42,6 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.el = el;
 			this.markers = markers;
 			this.player = player;
-			this.iFrameReady = false;
 
 			Database.initialize(toc);
 			$(".toc").TOCTree("setStatus", Database.getItems());
@@ -76,10 +74,29 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.currentIndex = undefined;
 
 			this.trackID = 1;
+			this.busyScrolling = false;
+		},
+
+		HashInURL: function (url) {
+			var n = url.lastIndexOf("#");
+			if (n != -1) return url.substr(n);
+			else return "";
 		},
 
 		getCurrentIndex: function () {
 			return this.currentIndex;
+		},
+
+		setCurrentIndex: function (index) {
+			if (index == this.currentIndex + 1) {
+				this.markItemCompleted(this.currentIndex);
+			}
+
+			this.currentIndex = index;
+
+			this.updateUI();
+
+			this.saveCurrentVideoIndex();
 		},
 
 		saveCurrentVideoIndex: function () {
@@ -162,9 +179,7 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 				this.player.play();
 			}
 
-			this.currentIndex = index;
-			
-			this.updateUI();
+			this.setCurrentIndex(index);
 
 			var showAllMarkers = options && options.showAllMarkers;
 
@@ -172,25 +187,58 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 
 			this.removeAllTriggers();
 			this.addTriggersForThisVideo();
+		},
 
-			this.saveCurrentVideoIndex();
+		onDoneScrolling: function () {
+			this.busyScrolling = false;
+		},
+
+		scrollToHash: function (index, immediate) {
+			if (index == undefined) {
+				index = this.currentIndex;
+			}
+			immediate = (immediate == undefined) ? false : immediate;
+
+			var hash = this.HashInURL(this.toc[index].src);
+			var el = $("#main_iframe").contents().find(hash);
+			var dest = 0;
+
+			if (el.length) {
+				var top = el.offset().top;
+				dest = top - 30;
+			}
+
+			if (immediate) {
+				$("#video").scrollTop(dest);
+			} else {
+				this.busyScrolling = true;
+				$("#video").stop().animate({scrollTop: dest}, { duration: 1000, complete: $.proxy(this.onDoneScrolling, this) });
+			}
 		},
 
 		playExtraFromTOC: function (index, options) {
-			this.iFrameReady = false;
+			if (options.replaceAll == undefined) options.replaceAll = true;
 
-			if (options.doNotLoad != true) {
+			if (options.replaceAll == true) {
 				var sel = $(".text-holder *").not("#main_iframe");
 				sel.remove();
-//				$("iframe[id != 'main_iframe']").remove();
-				$("#main_iframe").attr( { src: this.toc[index].src, "data-index": index } ).show();
+
+				var curSrc = $("#main_iframe").attr("src");
+
+				if (curSrc && URLWithoutHash(curSrc) == URLWithoutHash(this.toc[index].src)) {
+					// same page we're already on
+					$("#main_iframe").attr( { "data-index": index } ).show();
+
+					this.scrollToHash(index);
+				} else {
+					$("#main_iframe").height("auto").attr( { src: this.toc[index].src, "data-index": index } ).show();
+				}
+
 				$("#main_video").hide();
 				this.player.pause();
 			}
 
-			this.currentIndex = index;
-
-			this.updateUI();
+			this.setCurrentIndex(index);
 
 			var showAllMarkers = options && options.showAllMarkers;
 
@@ -198,8 +246,6 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 
 			this.removeAllTriggers();
 			this.addTriggersForThisVideo();
-
-			this.saveCurrentVideoIndex();
 		},
 		
 		getFirstVideoFromTOC: function () {
@@ -235,7 +281,7 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			var previousSrc = URLWithoutHash(this.toc[this.currentIndex].src);
 
 			//this.advanceTOC( { previousSource: previousSrc, skipToNextSource: true } );
-			this.advanceTOC( { previousSource: previousSrc, skipToNextSource: true, doNotLoad: true } );
+			this.advanceTOC( { previousSource: previousSrc, skipToNextSource: true, replaceAll: false } );
 		},
 
 		markItemStarted: function (index) {
@@ -251,6 +297,8 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		},
 
 		markItemCompleted: function (index) {
+			console.log("complete = " + index);
+
 			Database.setItemProperty(this.currentIndex, "completed", true);
 			$(".toc").TOCTree("markCompleted", index);
 
@@ -575,6 +623,48 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			}
 
 			return null;
+		},
+
+		findCurrentItem: function () {
+			// look for h1, h2 on screen
+			var headers = $("iframe").contents().find("h1:onScreen, h2:onScreen").last();
+			if (headers.length) {
+				var id = "#" + headers.eq(0).attr("id");
+				for (var i = 0; i < this.toc.length; i++) {
+					if (i == 20) {
+						var a = 5;
+					}
+					if (this.toc[i].hash == id) {
+						return i;
+					}
+				}
+			}
+
+			return null;
+			/*
+			for (var i = this.toc.length - 1; i >= 0; i--) {
+				// check for this hash on any of the iframes onscreen
+				var hash = this.toc[i].hash;
+				if (hash) {
+					var onscreen = $("iframe:onScreen");
+					var found = false;
+					for (var j = 0; j < onscreen.length; j++) {
+						var iframe = onscreen.eq(j);
+						var contents = iframe.contents().find(hash);
+						if (contents.length) {
+							var also = contents.is(":onScreen");
+							console.log(hash + " is on screen");
+							console.log(contents);
+							found = true;
+							break;
+						}
+					}
+					if (found) {
+						break;
+					}
+				}
+			}
+			*/
 		}
 			
 	};

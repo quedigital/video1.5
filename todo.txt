@@ -1,6 +1,6 @@
-// TODO: (Habitat) make TOC match video's DOM structure more exactly
+// TODO: no #main_iframe; refactor out some of the iframe code in main.js; auto-advance doesn't always trigger because of various event inconsistencies; track hashtags in subsequent iframes too
+// TODO: auto-load previous sections too
 // TODO: load from minimum index.html (via AWS folder)
-// TODO: refactor out some of the iframe code in main.js
 // TODO: debounce search so it's more responsive (maybe)
 // TODO: workflow for spreadsheet to json (node.js?)
 // TODO: get coach-marks to load from library
@@ -9,6 +9,8 @@
 // TODO: scroll resource markers to keep the current one in the middle
 // TODO: search field (searches TOC and transcript? shows results how?)
 // TODO: do something with transcript? (overlay?)
+
+// DESIGN: when are sections marked "complete" or "started"? when scrolled? when children are all scrolled?
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -60,3 +62,9 @@
 // DONE: (Habitat) click Next or auto-advance "completes" a section
 // DONE: (Habitat) highlight and scroll to currently visible section in TOC
 // DONE: (Habitat) open zoomed images in modal pop-up
+// DONE: (Habitat) make TOC match video's DOM structure more exactly
+// DONE: center toc upon first load
+// DONE: don't auto-scroll immediately after a page loads
+// DONE: store hashtags in toc
+// DONE: track hashtag sections more accurately
+// DONE: use hashtags for completion of sections (in Habitat mode)
