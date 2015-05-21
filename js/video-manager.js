@@ -1,4 +1,7 @@
-define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-markers", "jquery.onscreen"], function (BootstrapDialog, Database) {
+define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-markers", "jquery.onscreen", "iframe-holder"], function (BootstrapDialog, Database) {
+
+	// NOTE: I don't understand why I couldn't use this.waitingForAutoAdvance; somehow the instance of VideoManager passed into iframe-holder wasn't the same (!)
+	waitingForAutoAdvance = false;
 
 	String.prototype.toHHMMSS = function () {
 		var sec_num = parseInt(this, 10);
@@ -18,9 +21,37 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 	};
 
 	function URLWithoutHash (url) {
-		var n = url.lastIndexOf("#");
-		if (n != -1) return url.substr(0, n);
-		else return url;
+		if (url) {
+			var n = url.lastIndexOf("#");
+			if (n != -1) return url.substr(0, n);
+			else return url;
+		} else
+			return url;
+	}
+
+	function iFrameElementsOnScreen (elements, iframe) {
+		var visible = [];
+		var $iframe = $(iframe);
+
+		for (var i = 0; i < elements.length; i++) {
+			var elem = elements[i];
+			var $window = $(window);
+			var viewport_top = 0;//$window.scrollTop() + $("#video").scrollTop();
+			var viewport_height = $window.height();
+			var viewport_bottom = viewport_top + viewport_height;
+			var $elem = $(elem);
+			var top = $elem.offset().top + $iframe.offset().top;
+			var height = $elem.height();
+			var bottom = top + height;
+
+			if ((top >= viewport_top && top < viewport_bottom) ||
+				(bottom > viewport_top && bottom <= viewport_bottom) ||
+				(height > viewport_height && top <= viewport_top && bottom >= viewport_bottom)) {
+				visible.push(elem);
+			}
+		}
+
+		return $(visible);
 	}
 
 	videojs.BackButton = videojs.Button.extend({});
@@ -42,6 +73,7 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.el = el;
 			this.markers = markers;
 			this.player = player;
+			this.name = "Larry";
 
 			Database.initialize(toc);
 			$(".toc").TOCTree("setStatus", Database.getItems());
@@ -56,6 +88,8 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.player.on("play", $.proxy(this.onVideoStarted, this));
 			this.player.on("ended", $.proxy(this.onVideoEnded, this));
 			this.player.on("timeupdate", $.proxy(this.saveCurrentVideoTime, this));
+
+			$("#video").scroll($.proxy(this.onScrollContent, this));
 
 			this.player.markers({
 				markerStyle: {
@@ -193,14 +227,14 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			this.busyScrolling = false;
 		},
 
-		scrollToHash: function (index, immediate) {
+		scrollToHash: function (iframe, index, immediate) {
 			if (index == undefined) {
 				index = this.currentIndex;
 			}
 			immediate = (immediate == undefined) ? false : immediate;
 
 			var hash = this.HashInURL(this.toc[index].src);
-			var el = $("#main_iframe").contents().find(hash);
+			var el = iframe.contents().find(hash);
 			var dest = 0;
 
 			if (el.length) {
@@ -216,22 +250,39 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			}
 		},
 
+		onIFrameLoaded: function (iframe) {
+			waitingForAutoAdvance = false;
+		},
+
+		addIFrame: function (params) {
+			var iframe = $("<div>").iFrameHolder({ manager: this, src: this.toc[params.index].src, index: params.index, scrollTo: params.scrollTo });
+			iframe.appendTo(".iframe-holder");
+		},
+
 		playExtraFromTOC: function (index, options) {
 			if (options.replaceAll == undefined) options.replaceAll = true;
 
 			if (options.replaceAll == true) {
-				var sel = $(".text-holder *").not("#main_iframe");
-				sel.remove();
+				// check to see if any of the current iframes have our source
+				var new_source = URLWithoutHash(this.toc[index].src);
+				var existing = $(".iframe-holder").find("iframe").map(function (index, item) {
+					var src = $(item).attr("src");
+					if (new_source == URLWithoutHash(src)) {
+						return item;
+					}
+					return null;
+				});
 
-				var curSrc = $("#main_iframe").attr("src");
-
-				if (curSrc && URLWithoutHash(curSrc) == URLWithoutHash(this.toc[index].src)) {
+				if (existing.length) {
 					// same page we're already on
-					$("#main_iframe").attr( { "data-index": index } ).show();
+					existing.attr( { "data-index": index } ).show();
 
-					this.scrollToHash(index);
+					this.scrollToHash(existing, index);
 				} else {
-					$("#main_iframe").height("auto").attr( { src: this.toc[index].src, "data-index": index } ).show();
+					var sel = $(".iframe-holder *");
+					sel.remove();
+
+					this.addIFrame( { index: index, scrollTo: true } );
 				}
 
 				$("#main_video").hide();
@@ -297,8 +348,6 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		},
 
 		markItemCompleted: function (index) {
-			console.log("complete = " + index);
-
 			Database.setItemProperty(this.currentIndex, "completed", true);
 			$(".toc").TOCTree("markCompleted", index);
 
@@ -611,11 +660,13 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 			return this.pop.SHOWING_ALL;
 		},
 
-		getNextSection: function () {
-			// return the title of the next entry with a different src (ie, a different section)
-			var curSrc = URLWithoutHash(this.toc[this.currentIndex].src);
+		getNextSection: function (index) {
+			if (index == undefined) index = this.currentIndex;
 
-			for (var i = this.currentIndex + 1; i < this.toc.length; i++) {
+			// return the title of the next entry with a different src (ie, a different section)
+			var curSrc = URLWithoutHash(this.toc[index].src);
+
+			for (var i = index + 1; i < this.toc.length; i++) {
 				var nextSrc = URLWithoutHash(this.toc[i].src);
 				if (nextSrc != curSrc) {
 					return { index: i, title: this.toc[i].desc, src: nextSrc };
@@ -626,46 +677,113 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 		},
 
 		findCurrentItem: function () {
-			// look for h1, h2 on screen
-			var headers = $("iframe").contents().find("h1:onScreen, h2:onScreen").last();
-			if (headers.length) {
-				var id = "#" + headers.eq(0).attr("id");
-				for (var i = 0; i < this.toc.length; i++) {
-					if (i == 20) {
-						var a = 5;
-					}
-					if (this.toc[i].hash == id) {
-						return i;
-					}
-				}
-			}
+			var me = this;
 
-			return null;
-			/*
-			for (var i = this.toc.length - 1; i >= 0; i--) {
-				// check for this hash on any of the iframes onscreen
-				var hash = this.toc[i].hash;
-				if (hash) {
-					var onscreen = $("iframe:onScreen");
-					var found = false;
-					for (var j = 0; j < onscreen.length; j++) {
-						var iframe = onscreen.eq(j);
-						var contents = iframe.contents().find(hash);
-						if (contents.length) {
-							var also = contents.is(":onScreen");
-							console.log(hash + " is on screen");
-							console.log(contents);
-							found = true;
-							break;
+			var iframes = $("iframe:onScreen");
+
+			var foundIndex = null;
+
+			$(iframes.get().reverse()).each(function (index, item) {
+				if (foundIndex) {
+					return foundIndex;
+				}
+
+				var iframe = $(item);
+
+				// look for the bottom-most h1, h2 on screen
+				var headers = iframe.contents().find("h1, h2");
+				var headersOnScreen = iFrameElementsOnScreen(headers, iframe);
+				for (var i = headersOnScreen.length - 1; i >= 0; i--) {
+					var id = "#" + headersOnScreen.eq(i).attr("id");
+					for (var j = 0; j < me.toc.length; j++) {
+						if (me.toc[j].hash == id) {
+							foundIndex = j;
+							return;
 						}
 					}
-					if (found) {
-						break;
+				}
+
+				// THEORY OF A WORKAROUND: if there's an h1 or h2 with an ID not in the TOC, use the HTML's id (this is a Habitat export problem, I think)
+				// HABITAT EXPORT WORKAROUND: check the iframe's html's id (the toc id's don't match the H1/H2 id's)
+				if (headersOnScreen.length && !foundIndex) {
+					var headers = iframe.contents().find("html");
+					var headersOnScreen = iFrameElementsOnScreen(headers, iframe);
+					for (var i = headersOnScreen.length - 1; i >= 0; i--) {
+						var id = "#" + headersOnScreen.eq(i).attr("id");
+						for (var j = 0; j < me.toc.length; j++) {
+							if (me.toc[j].hash == id) {
+								foundIndex = j;
+								return;
+							}
+						}
 					}
 				}
+			});
+
+			return foundIndex;
+		},
+
+		onScrollContent: function () {
+			if (!this.busyScrolling) {
+				this.syncTOCToContent();
+
+				this.checkForAutoAdvance();
 			}
-			*/
+		},
+
+		syncTOCToContent: function () {
+			var index = this.findCurrentItem();
+
+			if (index) {
+				if (index != this.getCurrentIndex()) {
+					this.setCurrentIndex(index);
+				}
+
+				var entry = $(".toc li[data-index=" + index + "]");
+				var scroller = $("#contents-pane .scroller");
+				var t = scroller.scrollTop();
+				var h = scroller.height();
+				var p = entry.offset().top;
+				var desired_top = (h * .5);// - entry.height();
+				var adj = p - desired_top;
+				var dest = (t + adj);
+				var currTarget = scroller.attr("data-scrolltarget");
+				var diff = (currTarget - dest);
+				if (currTarget == undefined || Math.abs(diff) > 20) {
+					scroller.attr("data-scrolltarget", dest);
+					scroller.stop().animate(
+						{
+							scrollTop: dest
+						},
+						{
+							duration: 1000,
+							complete: function () {
+							}
+						}
+					);
+				}
+			}
+		},
+
+		checkForAutoAdvance: function () {
+			// check for auto-advance
+			var h_container = $("#video").scrollTop() + $("#video").height();
+			var h_scroller = $("#video .iframe-holder").height();
+
+			var distToScroll = h_container - h_scroller;
+
+			if (waitingForAutoAdvance) return;
+
+			if (distToScroll >= 0) {
+				var obj = this.getNextSection();
+
+				waitingForAutoAdvance = true;
+
+				this.addIFrame( { index: obj.index, scrollTo: false } );
+			}
+
 		}
+
 			
 	};
 	

@@ -106,7 +106,7 @@ require(["video-manager", "bootstrap-dialog", "videojs", "toc-tree", "popcorn", 
 
 		// check for auto-advance
 		var h_container = $("#video").scrollTop() + $("#video").height();
-		var h_scroller = $("#video .text-holder").height();
+		var h_scroller = $("#video .iframe-holder").height();
 
 		var distToScroll = h_container - h_scroller;
 
@@ -117,7 +117,7 @@ require(["video-manager", "bootstrap-dialog", "videojs", "toc-tree", "popcorn", 
 
 			var iframe = $('<iframe id="next_iframe" frameborder="0"></iframe>');
 			iframe.attr( { "src": obj.src, "data-index": obj.index, "data-ready": false });
-			$(".text-holder").append(iframe);
+			$(".iframe-holder").append(iframe);
 
 			iframe.on("load", onIFrameLoaded);
 
@@ -192,7 +192,6 @@ require(["video-manager", "bootstrap-dialog", "videojs", "toc-tree", "popcorn", 
 
 		if (obj) {
 			// find image links within figures
-
 			var figs = iframe.contents().find("figure a img");
 			figs.each(function (index, item) {
 				var captionTitle = $(item).parents("figure").find(".caption-title");
