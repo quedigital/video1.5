@@ -1,8 +1,7 @@
-// TODO: remove old code from main.js
-// TODO: complete last section just before auto-advancing
-// TODO: when loading a section, pre-load the previous and next sections too
-// TODO: auto-load previous sections too
 // TODO: load from minimum index.html (via AWS folder)
+// TODO: figure out how to upload (or link to?) video and Captivates from within Habitat
+// TODO: auto-load previous sections too
+// TODO: when loading a section, pre-load the previous and next sections too
 // TODO: rename #video to #content (or something)
 // TODO: debounce search so it's more responsive (maybe)
 // TODO: workflow for spreadsheet to json (node.js?)
@@ -73,3 +72,5 @@
 // DONE: use hashtags for completion of sections (in Habitat mode)
 // DONE: no #main_iframe; refactor out some of the iframe code in main.js; auto-advance doesn't always trigger because of various event inconsistencies; track hashtags in subsequent iframes too
 // DONE: don't auto-advance until the previous auto-advance is done
+// DONE: remove old code from main.js
+// DONE: complete last section just before auto-advancing

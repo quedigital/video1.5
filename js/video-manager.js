@@ -780,8 +780,9 @@ define(["bootstrap-dialog", "database", "bootstrap-notify", "videojs", "videojs-
 				waitingForAutoAdvance = true;
 
 				this.addIFrame( { index: obj.index, scrollTo: false } );
-			}
 
+				this.setCurrentIndex(obj.index);
+			}
 		}
 
 			
